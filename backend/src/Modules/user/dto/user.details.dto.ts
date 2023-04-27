@@ -1,6 +1,5 @@
 import { Expose, Transform } from "class-transformer";
 import { Department } from "src/Modules/department/entities/department.entity";
-import { Item } from "src/Modules/item/entities/item.entity";
 import { Organization } from "src/Modules/organization/entities/organization.entity";
 import { Photo } from "src/Modules/photo/entities/photo.entity";
 import { Request } from "src/Modules/request/entities/request.entity";
@@ -36,7 +35,7 @@ export class UserDetailDto{
     @Expose()
     department: Department
 
-    @Transform(({value})=>value ? value.map((item)=>(
+    @Transform(({obj})=>obj.role.role !== 'employee' ? obj.item.map((item)=>(
         {
             id: item.id,
             name: item.name,
@@ -47,14 +46,15 @@ export class UserDetailDto{
         }
     ))
     :
-    value
+    undefined
     )
     @Expose()
-    item: Item
+    item: any
 
     @Transform(({value})=>value ? value.map((request)=>(
         {
             id: request.id,
+            empName: request.user.name,
             itemName: request.item.name,
             category: request.item.category.parent.name,
             subCategory: request.item.category.name,
@@ -67,5 +67,32 @@ export class UserDetailDto{
     )
     @Expose()
     request: Request
+
+    @Transform(({obj})=>obj.role.role === 'employee' ? obj.designation : undefined)
+    @Expose()
+    designation: string
+
+    @Transform(({obj})=>obj.role.role === 'employee' ? obj.education : undefined)
+    @Expose()
+    education: string
+
+    @Transform(({obj})=>obj.role.role === 'employee' ? obj.companyExperience : undefined)
+    @Expose()
+    companyExperience: string
+
+    @Transform(({obj})=>obj.role.role === 'employee' ? obj.totalExperience : undefined)
+    @Expose()
+    totalExperience: string
+
+    @Transform(({obj})=>obj.role.role === 'employee' ? obj.item.map((item)=>( {
+        id: item.id,
+        name: item.name,
+        category: item.category.parent.name,
+        subCategory: item.category.name,
+        assigningDate: item.assigned_date,
+        assignedBy: item.assigned_by.name
+    })) : undefined)
+    @Expose()
+    inventory: any
 
 }

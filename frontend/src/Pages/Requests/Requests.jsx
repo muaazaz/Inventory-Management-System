@@ -12,55 +12,61 @@ import { useEffect, useState } from "react";
 import Select from "../../Components/Shared/Select/Select";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getRequests, searchRequests, selectUsingStatus } from "../../Redux/request/requestAction";
+import {
+  getRequests,
+  searchRequests,
+  selectUsingStatus,
+} from "../../Redux/request/requestAction";
 
 const Requests = () => {
   const [search, setSearch] = useState(""),
     navigate = useNavigate(),
     [statusSelect, setStatusSelect] = useState(""),
     { userValidation, requestData } = useSelector((state) => state),
-    dispatch = useDispatch()
+    dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getRequests('request'))
+    dispatch(getRequests("request"));
   }, [userValidation]);
   return (
     <Box sx={main}>
       <Box sx={headerDiv}>
         <Typography sx={headerText}>Requests</Typography>
-        <Box component="form" sx={searchStyles}>
-          <InputBase
-            sx={{ textAlign: "center", m: 1 }}
-            placeholder="Search something..."
-            value={search}
-            onChange={(e) => {
-              dispatch(searchRequests({search: e.target.value, type: 'request'}))
-              setSearch(e.target.value);
-              setStatusSelect("")
-            }}
-          />
-          <IconButton
-            type="button"
-            sx={{ p: "5%" }}
-            color="primary"
-          >
-            <SearchIcon />
-          </IconButton>
-        </Box>
         {userValidation.role !== "employee" && (
-          <Select
-            label={"Select Status"}
-            menuItems={requestStatusOptions}
-            defaultValue={statusSelect}
-            value={"status"}
-            html={"status"}
-            noLabel={true}
-            onChange={(e) => {
-              setSearch("")
-              setStatusSelect(e.target.value);
-              dispatch(selectUsingStatus({select: e.target.value, type: 'request'}))
-            }}
-          />
+          <>
+            <Box component="form" sx={searchStyles}>
+              <InputBase
+                sx={{ textAlign: "center", m: 1 }}
+                placeholder="Search something..."
+                value={search}
+                onChange={(e) => {
+                  dispatch(
+                    searchRequests({ search: e.target.value, type: "request" })
+                  );
+                  setSearch(e.target.value);
+                  setStatusSelect("");
+                }}
+              />
+              <IconButton type="button" sx={{ p: "5%" }} color="primary">
+                <SearchIcon />
+              </IconButton>
+            </Box>
+            <Select
+              label={"Select Status"}
+              menuItems={requestStatusOptions}
+              defaultValue={statusSelect}
+              value={"status"}
+              html={"status"}
+              noLabel={true}
+              onChange={(e) => {
+                setSearch("");
+                setStatusSelect(e.target.value);
+                dispatch(
+                  selectUsingStatus({ select: e.target.value, type: "request" })
+                );
+              }}
+            />
+          </>
         )}
         {userValidation.role === "employee" && (
           <Button

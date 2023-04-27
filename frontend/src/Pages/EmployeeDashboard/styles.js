@@ -21,9 +21,9 @@ const mainDiv = {
   info = {
     display: "flex",
     flexWrap: "wrap",
-    width: "60%",
+    width: "80%",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
   },
   img = {
     boxShadow: "0 1px 5px 1px gray",

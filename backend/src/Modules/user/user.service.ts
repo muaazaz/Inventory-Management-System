@@ -98,7 +98,12 @@ export class UserService {
   async findOne(id: number) {
     const user = await this.repo.findOne({
       where: { id },
-      relations: ['organization', 'photo', 'department', 'organization.photo', 'item', 'request', 'item.category', 'item.category.parent']
+      relations: [
+      'role', 'organization', 'photo', 'department', 'organization.photo', 'item', 
+      'request', 'request.user', 'request.item', 'request.item.category', 
+      'request.item.category.parent', 'item.category', 'item.category.parent',
+      'item.assigned_to', 'item.assigned_by'
+    ]
     })
     if (!user) {
       throw new NotFoundException('user not found')

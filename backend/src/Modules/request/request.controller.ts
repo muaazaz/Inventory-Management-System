@@ -24,6 +24,13 @@ export class RequestController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(AllRequestsDto)
+  @Get('findby')
+  findBySearch(@Query() query: any, @UserDecorator() user: any){
+    return this.requestService.findBySearch(query.search, query.selectType, query.selectStatus, query.type, user)
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Serialize(AllRequestsDto)
   @Get()
   findAll(@Query() query: any, @UserDecorator() user: any) {
     return this.requestService.findAll(query.type, user);
@@ -37,8 +44,8 @@ export class RequestController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRequestDto: UpdateRequestDto) {
-    return this.requestService.update(+id, updateRequestDto);
+  update(@Param('id') id: string, @Body() updateRequestDto: UpdateRequestDto, @UserDecorator() user: any) {
+    return this.requestService.update(+id, updateRequestDto, user);
   }
 
   @Delete(':id')

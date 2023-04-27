@@ -22,6 +22,7 @@ const searchStyles = {
     display: "flex",
     width: "70%",
     alignItems: "center",
+    padding: "1%"
   },
   headerText = {
     fontSize: "2em",

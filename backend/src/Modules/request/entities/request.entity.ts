@@ -23,7 +23,7 @@ export class Request {
     @CreateDateColumn()
     createdAt: Date
 
-    @OneToOne(()=>Item, (item)=>item.request)
+    @ManyToOne(()=>Item, (item)=>item.request)
     @JoinColumn()
     item: Item
 

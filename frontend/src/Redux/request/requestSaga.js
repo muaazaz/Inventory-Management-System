@@ -8,6 +8,7 @@ import {
   GET_REQUEST_DETAIL,
   REQUEST_SEARCH,
   SELECT_REQUEST_BY_STATUS,
+  SELECT_REQUEST_BY_TYPE,
   SET_ALL_REQUESTS,
   SET_CREATED_REQUEST,
   SET_CREATE_REQUEST_ERROR,
@@ -47,7 +48,7 @@ function* searchRequest({ search, selectStatus, selectType, requestType }) {
   const res = yield fetchRequest(
     `/request/findby?search=${search ? search : ``}&selectStatus=${
       selectStatus ? selectStatus : ``
-    }@selectType=${selectType ? selectType : ""}&type=${requestType}`,
+    }&selectType=${selectType ? selectType : ""}&type=${requestType}`,
     "GET"
   );
   yield put({ type: SET_REQUEST_SEARCH, payload: { requests: res } });
@@ -59,5 +60,5 @@ export default function* requestSaga() {
   yield takeEvery(EDIT_REQUEST, editRequest);
   yield takeEvery(DELETE_REQUEST, deleteRequest);
   yield takeEvery(CREATE_REQUEST, createRequest);
-  yield takeEvery([SELECT_REQUEST_BY_STATUS, REQUEST_SEARCH], searchRequest);
+  yield takeEvery([SELECT_REQUEST_BY_STATUS, SELECT_REQUEST_BY_TYPE, REQUEST_SEARCH], searchRequest);
 }

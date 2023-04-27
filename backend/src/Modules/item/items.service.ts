@@ -49,6 +49,10 @@ export class ItemsService {
       const user = await this.userService.findOne(updateItemDto.userId)
       item.assigned_to = user
     }
+    if(updateItemDto.assignedById){
+      const user = await this.userService.findOne(updateItemDto.assignedById)
+      item.assigned_by = user
+    }
     Object.assign(item, updateItemDto)
 
     return this.repo.save(item);

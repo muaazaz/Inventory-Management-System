@@ -2,7 +2,7 @@ import { Category } from "src/Modules/category/entities/category.entity";
 import { Request } from "src/Modules/request/entities/request.entity";
 import { User } from "src/Modules/user/entities/user.entity";
 import { Vendor } from "src/Modules/vendor/entities/vendor.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Item {
@@ -33,6 +33,9 @@ export class Item {
     @CreateDateColumn()
     created_at: Date
 
+    @Column({type: 'date', nullable: true})
+    assigned_date: string
+
     @ManyToOne(()=>Category, (category)=>category.item)
     @JoinColumn()
     category: Category
@@ -41,11 +44,15 @@ export class Item {
     @JoinColumn()
     assigned_to: User
 
+    @ManyToOne(()=>User,(user)=>user.item)
+    @JoinColumn()
+    assigned_by: User
+
     @ManyToOne(()=>Vendor, (vendor)=>vendor.items)
     @JoinColumn()
     vendor: Vendor
 
-    @OneToOne(()=>Request, (request)=>request.item)
+    @OneToMany(()=>Request, (request)=>request.item)
     request: Request
 
 }

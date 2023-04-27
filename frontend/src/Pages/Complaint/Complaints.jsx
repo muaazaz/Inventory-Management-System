@@ -48,57 +48,59 @@ const Complaints = () => {
         <Box sx={main}>
           <Box sx={headerDiv}>
             <Typography sx={headerText}>Complaints</Typography>
-            <Box component="form" sx={complaintSearchStyles}>
-              <InputBase
-                sx={{ textAlign: "center", m: 1 }}
-                placeholder="Search something..."
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setStatusSelect("");
-                  setOrgSelect("");
-                  dispatch(searchComplaint(e.target.value));
-                }}
-              />
-              <IconButton
-                type="button"
-                sx={{ p: "5%" }}
-                color="primary"
-                onClick={handleSearch}
-              >
-                <SearchIcon />
-              </IconButton>
-            </Box>
-            {userValidation.role === "superadmin" && (
-              <Select
-                label={"Select Organization"}
-                menuItems={orgData.organizations}
-                defaultValue={orgSelect}
-                value={"name"}
-                html={"name"}
-                noLabel={true}
-                onChange={(e) => {
-                  setOrgSelect(e.target.value);
-                  setSearch("");
-                  setStatusSelect("");
-                  dispatch(selecctComplaintOrganization(e.target.value));
-                }}
-              />
+            {userValidation.role !== "employee" && (
+              <Box component="form" sx={complaintSearchStyles}>
+                <InputBase
+                  sx={{ textAlign: "center", m: 1 }}
+                  placeholder="Search something..."
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setStatusSelect("");
+                    setOrgSelect("");
+                    dispatch(searchComplaint(e.target.value));
+                  }}
+                />
+                <IconButton
+                  type="button"
+                  sx={{ p: "5%" }}
+                  color="primary"
+                  onClick={handleSearch}
+                >
+                  <SearchIcon />
+                </IconButton>
+              </Box>
             )}
             {userValidation.role === "superadmin" && (
-              <Select
-                defaultValue={statusSelect}
-                label={"Select Status"}
-                menuItems={complaintStatusOptions}
-                value={"status"}
-                html={"status"}
-                noLabel={true}
-                onChange={(e) => {
-                  setStatusSelect(e.target.value);
-                  setOrgSelect("");
-                  setSearch("");
-                  dispatch(selectComplaintStatus(e.target.value));
-                }}
-              />
+              <>
+                <Select
+                  label={"Select Organization"}
+                  menuItems={orgData.organizations}
+                  defaultValue={orgSelect}
+                  value={"name"}
+                  html={"name"}
+                  noLabel={true}
+                  onChange={(e) => {
+                    setOrgSelect(e.target.value);
+                    setSearch("");
+                    setStatusSelect("");
+                    dispatch(selecctComplaintOrganization(e.target.value));
+                  }}
+                />
+                <Select
+                  defaultValue={statusSelect}
+                  label={"Select Status"}
+                  menuItems={complaintStatusOptions}
+                  value={"status"}
+                  html={"status"}
+                  noLabel={true}
+                  onChange={(e) => {
+                    setStatusSelect(e.target.value);
+                    setOrgSelect("");
+                    setSearch("");
+                    dispatch(selectComplaintStatus(e.target.value));
+                  }}
+                />
+              </>
             )}
             {userValidation.role === "employee" && (
               <Button
@@ -124,13 +126,16 @@ const Complaints = () => {
             }
             rowsPerPage={10}
             hidden={false}
+            routeQueryString={
+              userValidation.role === "employee" ? "?type=own" : ""
+            }
             viewRoute={"details/"}
             data={
               userValidation.role === "employee"
-              ? complaintData.ownComplaints
-              : complaintData.complaints 
-              ? complaintData.complaints 
-              : []
+                ? complaintData.ownComplaints
+                : complaintData.complaints
+                ? complaintData.complaints
+                : []
             }
           />
         </Box>

@@ -1,6 +1,5 @@
 import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
-import ReactFileReader from "react-file-reader";
-import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
+
 import {
   cancelButton,
   dividerStyles,
@@ -12,34 +11,51 @@ import {
 } from "./styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../../Components/Shared/Input/Input";
-import Select from "../../Components/Shared/Select/Select";
-import { data, dummySelect, ownInventoryLabel } from "../../Constant/dummyData";
+import { ownInventoryLabel } from "../../Constant/dummyData";
 import Tables from "../../Components/Shared/Tables/Tables";
+import PhotoUpload from "../../Components/Shared/PhotoUpload/PhotoUpload";
+import "./employeeEdit.css"
+import { useDispatch, useSelector } from "react-redux";
+import { editUser, getUserDetails } from "../../Redux/user/userAction";
+import { getCookiesData } from "../../utils/handleCookies";
 
 const EmployeeEdit = () => {
   const navigate = useNavigate(),
+    {id} = getCookiesData(),
+    dispatch = useDispatch(),
+    {userDetails} = useSelector((state)=>state.userData),
     [formData, setFormData] = useState({
       image: "",
       name: "",
-      email: "",
       designation: "",
-      department: "",
       contactNo: "",
       education: "",
       companyExperience: "",
       totalExperience: "",
     });
-  const handleFile = (file) => {
-    setFormData({
-      ...formData,
-      image: file.base64,
-    });
-  };
+
+    useEffect(()=>{
+      dispatch(getUserDetails(id))
+      if(userDetails){
+        setFormData({
+          ...formData,
+          image: userDetails.photo,
+          name: userDetails.name,
+          contactNo: userDetails.contactNo,
+          designation: userDetails.designation,
+          education: userDetails.education,
+          companyExperience: userDetails.companyExperience,
+          totalExperience: userDetails.totalExperience
+        })
+      }
+    },[dispatch])
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    dispatch(editUser({id, formData}))
+    navigate(-1)
   };
   return (
     <Box sx={mainDivStyles}>
@@ -88,26 +104,21 @@ const EmployeeEdit = () => {
             {"Upload a high res picture with clear face"}
           </Typography>
         </Box>
-        <ReactFileReader
-          fileTypes={[".jpg", ".png", ".jpeg"]}
-          base64={true}
-          multipleFiles={false}
-          handleFiles={handleFile}
-        >
-          <Button
-            className="btn"
-            startIcon={<AddPhotoAlternateOutlinedIcon />}
-            variant="contained"
-          >
-            Upload
-          </Button>
-        </ReactFileReader>
+        <PhotoUpload
+          setImage={(image) => {
+            setFormData({
+              ...formData,
+              image,
+            });
+          }}
+        />
       </Box>
-      <Divider/>
+      <Divider />
       <Box component="form" id="employee-form" onSubmit={handleSubmit}>
         <Input
           name={"Full Name"}
           placeHolder={"Full Name"}
+          value={formData.name}
           onChange={(e) => {
             setFormData({
               ...formData,
@@ -116,41 +127,9 @@ const EmployeeEdit = () => {
           }}
         />
         <Input
-          name={"Email Address"}
-          placeHolder={"Email Address"}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              email: e.target.value,
-            });
-          }}
-        />
-        <Input
-          name={"Designation"}
-          placeHolder={"Enter your designation"}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              designation: e.target.value,
-            });
-          }}
-        />
-        <Select
-          label={"Department"}
-          menuItems={dummySelect}
-          value={"name"}
-          html={"name"}
-          divider={true}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              department: e.target.value,
-            });
-          }}
-        />
-        <Input
           name={"Contact Number"}
           placeHolder={"Contact Number"}
+          value={formData.contactNo}
           onChange={(e) => {
             setFormData({
               ...formData,
@@ -159,8 +138,20 @@ const EmployeeEdit = () => {
           }}
         />
         <Input
+          name={"Designation"}
+          placeHolder={"Enter your designation"}
+          value={formData.designation}
+          onChange={(e) => {
+            setFormData({
+              ...formData,
+              designation: e.target.value,
+            });
+          }}
+        />
+        <Input
           name={"Education"}
           placeHolder={"Enter you education"}
+          value={formData.education}
           onChange={(e) => {
             setFormData({
               ...formData,
@@ -171,6 +162,7 @@ const EmployeeEdit = () => {
         <Input
           name={"Company Experience(years)"}
           placeHolder={"Company Experience"}
+          value={formData.companyExperience}
           onChange={(e) => {
             setFormData({
               ...formData,
@@ -181,6 +173,7 @@ const EmployeeEdit = () => {
         <Input
           name={"Total Experience(years)"}
           placeHolder={"Total Experience"}
+          value={formData.totalExperience}
           onChange={(e) => {
             setFormData({
               ...formData,
@@ -195,7 +188,7 @@ const EmployeeEdit = () => {
         rowsPerPage={4}
         hidden={true}
         viewRoute={"/complaints/details/"}
-        data={data}
+        data={userDetails ? userDetails.inventory : []}
         view={false}
       />
     </Box>

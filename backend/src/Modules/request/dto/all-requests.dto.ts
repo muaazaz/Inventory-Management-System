@@ -6,9 +6,9 @@ export class AllRequestsDto{
     @Expose()
     id: number
 
-    @Transform(({value})=>value?.name)
+    @Transform(({obj})=> obj.user.organization ? obj.user.name : undefined)
     @Expose()
-    user: User
+    user: string
 
     @Transform(({value})=>value?.name)
     @Expose()
@@ -22,9 +22,9 @@ export class AllRequestsDto{
     @Expose()
     subCategory: string
 
-    @Transform(({obj})=>obj.type === 'Faulty' ? obj.returnStatus : undefined)
+    @Transform(({obj})=> obj.user.organization ? obj.type === 'Faulty' ? obj.returnStatus : undefined : obj.type)
     @Expose()
-    returnType: string
+    type: string
 
     @Transform(({obj})=>(obj?.createdAt.toLocaleDateString()))
     @Expose()

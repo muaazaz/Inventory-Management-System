@@ -27,15 +27,15 @@ export default function Tables({
   let round = 0,
     count = 0;
   //Calculating no of pages
-  if (data.length / rowsPerPage < 1) {
+  if (data?.length / rowsPerPage < 1) {
     count = 1;
   } else {
-    if (data.length % rowsPerPage > 0 && data.length / rowsPerPage !== 1) {
+    if (data?.length % rowsPerPage > 0 && data?.length / rowsPerPage !== 1) {
       round = 1;
     } else {
       round = 0;
     }
-    count = parseInt(data.length / rowsPerPage) + round;
+    count = parseInt(data?.length / rowsPerPage) + round;
   }
   useEffect(() => {
     if (label.includes("Image")) {
@@ -43,7 +43,7 @@ export default function Tables({
     } else {
       setImage(false);
     }
-    if (data.length > 0) {
+    if (data?.length > 0) {
       setGenTable(true);
     } else {
       setGenTable(false);

@@ -23,6 +23,7 @@ const complaintSearchStyles = {
     width: "70%",
     alignItems: "center",
     flexWrap: {md: "noWrap", xs:"wrap"},
+    padding: "1%"
   },
   headerText = {
     fontSize: "2em",

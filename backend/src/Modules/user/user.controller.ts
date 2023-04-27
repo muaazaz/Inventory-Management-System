@@ -73,7 +73,7 @@ export class UserController {
     return this.userService.findAll(user);
   }
 
-  @Roles(Role.SuperAdmin, Role.Admin)
+  @Roles(Role.SuperAdmin, Role.Admin, Role.Employee)
   @UseGuards(JwtAuthGuard, RolesGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(UserDetailDto)

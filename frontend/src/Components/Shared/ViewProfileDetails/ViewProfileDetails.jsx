@@ -1,11 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import { detailStyle, labelStyle, mainDiv } from "./styles";
 
-const ViewProfileDetails = ({label, detail}) => {
+const ViewProfileDetails = ({label: str, detail}) => {
+    const label = str.charAt(0).toUpperCase() + str.slice(1)  
     return ( 
         <Box sx={mainDiv}>
-            <Typography sx={labelStyle} variant="content">{label}</Typography>
-            <Typography sx={detailStyle} variant="content">{detail}</Typography>
+            <Typography sx={labelStyle}>{label}</Typography>
+            <Typography sx={detailStyle}>{detail}</Typography>
         </Box>
      );
 }

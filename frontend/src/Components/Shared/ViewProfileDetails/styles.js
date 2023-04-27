@@ -1,14 +1,20 @@
 const mainDiv = {
     display: "flex",
     flexDirection: "column",
-    margin: "1% 5%",
-    flexWrap: "wrap"
+    margin: "10%",
+    padding: "2%",
+    flexWrap: "nowrap",
+    width: "100%"
 },
 labelStyle = {
-    mb: 1
+    display: "flex",
+    mb: 1,
+    flexWrap: "nowrap"
 },
 detailStyle = {
-    fontWeight: "600"
+    display: "flex",
+    fontWeight: "600",
+    flexWrap: "nowrap"
 }
 export {
     mainDiv,
