@@ -1,0 +1,8 @@
+.all-link{
+  text-decoration: none;
+  color: gray;
+}
+
+.all-link:hover{
+  color: black;
+}

@@ -1,0 +1,31 @@
+.login-logo{
+    width: 18%;
+}
+.login-main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: white;
+}
+.login-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-evenly;
+    box-shadow: 1px 0px 10px 1px grey;
+    border-radius: 20px;
+    min-height: 500px;
+    margin: 2%;
+}
+
+@media screen and (max-width: 600px) {
+    .login-main{
+        width: 100%;
+    }
+    body{
+        background-color: white;
+    }
+}

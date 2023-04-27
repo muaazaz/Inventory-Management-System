@@ -1,0 +1,15 @@
+.notFound-main{
+    position: absolute;
+    top: 40%;
+    left:40%;
+}
+.notFound-main h1{
+    margin: auto;
+}
+.notFound-main a{
+    text-decoration: none;
+    color: gray;
+}
+.notFound-main a:hover{
+    text-decoration: underline;
+}

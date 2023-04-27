@@ -1,0 +1,41 @@
+.organization-card {
+  width: 90%;
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 1px 5px 1px gray;
+}
+
+.organization-search-content {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 2%;
+  justify-content: space-between;
+}
+
+.organization-search-content h1 {
+  cursor: default;
+}
+
+.organization-search {
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.organization-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (max-width: 600px){
+  .organization-search{
+    width: auto;
+  }
+}

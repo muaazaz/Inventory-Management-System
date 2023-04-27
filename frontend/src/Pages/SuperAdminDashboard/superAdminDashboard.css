@@ -1,0 +1,8 @@
+.admin-all-link{
+  text-decoration: none;
+  color: gray;
+}
+
+.admin-all-link:hover{
+  color: black;
+}

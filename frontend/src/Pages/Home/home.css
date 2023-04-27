@@ -1,0 +1,27 @@
+
+.home{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-evenly;
+    background-color: #4E85E6;
+    width: 100%;
+    min-height:61.25em;
+}
+.home h5{
+    font-family: monospace;
+    font-weight: 900;
+    color: white;
+}
+img{
+    width: 42%;
+}
+.home-link{
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    background-color: #F4A061;
+    border-radius: 5px;
+    padding: 1%;
+}

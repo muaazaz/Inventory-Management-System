@@ -1,0 +1,25 @@
+.table-content{
+    width: 95%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.view-link{
+    color: #007AFF;
+    text-decoration: none;
+}
+.table-container{
+    max-width: 95%;
+    border-radius: 10px;
+}
+.table-head{
+    background-color: #007AFF;
+}
+#table-cell{
+    color: white;
+}
+.pagination{
+    float: right;
+    padding: 2% 0;
+}

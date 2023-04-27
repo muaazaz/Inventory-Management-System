@@ -1,0 +1,24 @@
+.input-fields{
+    display: flex;
+    width: 50%;
+    margin: 2%;
+    align-items: center;
+    justify-content: space-between;   
+}
+.input-fields input{
+    width: 60%;
+    border-radius: 10px;
+    height: 3em;
+    border: 1px solid lightgrey;
+}
+.input-fields textarea{
+    border-radius: 10px;
+    border: 1px solid lightgrey;
+    resize: none;
+}
+@media screen and (max-width: 600px)  {
+    .input-fields{
+        width: auto;
+        margin: 2%;
+    }
+}
