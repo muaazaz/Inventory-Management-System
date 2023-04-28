@@ -8,7 +8,8 @@ import { RolesGuard } from 'src/guards/role.guard';
 import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/role.enum';
 import { Serialize } from 'src/decorators/serialize.decorator';
-import { AllCategoriesDto } from './dto/all-category.dto';
+import { SelectCategoriesDto } from './dto/select-category.dto';
+import { AllCategoryDto } from './dto/all-category.dto';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('category')
@@ -28,7 +29,15 @@ export class CategoryController {
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @Serialize(AllCategoriesDto)
+  @Serialize(SelectCategoriesDto)
+  @Roles(Role.Admin)
+  @Get('select')
+  findSelectOptions(@UserDecorator() user: any) {
+    return this.categoryService.findSelectOptions(user);
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Serialize(AllCategoryDto)
   @Roles(Role.Admin, Role.Employee)
   @Get()
   findAll(@UserDecorator() user: any) {

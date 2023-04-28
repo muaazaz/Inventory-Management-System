@@ -29,11 +29,11 @@ function Row({ row, viewRoute}) {
     <React.Fragment>
       <TableRow>
         {Object.entries(row).map(([key, val], i) => (
-          <>
+          <React.Fragment key={i}>
             {key !== "subCategories" && (
               <TableCell align="center">{val}</TableCell>
             )}
-          </>
+          </React.Fragment>
         ))}
         <ActionButton id={row.id} />
         <TableCell>

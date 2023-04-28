@@ -88,6 +88,7 @@ export const CREATE_CATEGORY = 'Create CATEGORY'
 export const SET_CREATE_CATEGORY_ERROR = 'Create CATEGORY error'
 export const SET_CREATED_CATEGORY = "Set a created CATEGORY"
 export const GET_CATEGORY = 'Get All CATEGORY'
+export const GET_CATEGORY_SELECT = 'Get All CATEGORY select options'
 export const SET_ALL_CATEGORY = 'Set All CATEGORY'
 export const GET_CATEGORY_DETAIL = 'Get CATEGORY Details'
 export const SET_CATEGORY_DETAIL = 'Set CATEGORY Details'

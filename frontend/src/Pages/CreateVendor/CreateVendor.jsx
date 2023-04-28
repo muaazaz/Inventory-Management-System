@@ -17,7 +17,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategories } from "../../Redux/category/categoryAction";
+import { getCategoriesSelect } from "../../Redux/category/categoryAction";
 import { createVendor } from "../../Redux/vendor/vendorAction";
 
 const CreateVendor = () => {
@@ -44,7 +44,7 @@ const CreateVendor = () => {
   }
 
   useEffect(()=>{
-    dispatch(getCategories())
+    dispatch(getCategoriesSelect())
     if(formData.categoryId){
       categoryData.categories.forEach((category)=>{
         if(category.id === formData.categoryId) setSubCategoriesSelect(category.childern)

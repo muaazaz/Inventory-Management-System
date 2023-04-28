@@ -36,6 +36,9 @@ export class Item {
     @Column({type: 'date', nullable: true})
     assigned_date: string
 
+    @Column({default: false})
+    faulty: boolean
+
     @ManyToOne(()=>Category, (category)=>category.item)
     @JoinColumn()
     category: Category

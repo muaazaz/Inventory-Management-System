@@ -8,7 +8,7 @@ import { UserModule } from '../user/user.module';
 import { VendorsModule } from '../vendor/vendors.module';
 
 @Module({
-  imports: [ CategoryModule, UserModule, VendorsModule, TypeOrmModule.forFeature([Item])],
+  imports: [CategoryModule, UserModule, VendorsModule, TypeOrmModule.forFeature([Item])],
   controllers: [ItemsController],
   providers: [ItemsService],
   exports: [ItemsService]

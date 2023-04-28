@@ -1,4 +1,4 @@
-import { CATEGORY_SEARCH, CREATE_CATEGORY, DELETE_CATEGORY, EDIT_CATEGORY, GET_CATEGORY, GET_CATEGORY_COUNT, GET_CATEGORY_DETAIL, SELECT_CATEGORY_BY_ORGANIZATION } from "../../Constant/reducerConstants"
+import { CATEGORY_SEARCH, CREATE_CATEGORY, DELETE_CATEGORY, EDIT_CATEGORY, GET_CATEGORY, GET_CATEGORY_COUNT, GET_CATEGORY_DETAIL, GET_CATEGORY_SELECT, SELECT_CATEGORY_BY_ORGANIZATION } from "../../Constant/reducerConstants"
 
 export const createCategory = (formData)=>{
     return({
@@ -10,6 +10,11 @@ export const createCategory = (formData)=>{
 export const getCategories = ()=>{
     return({
         type: GET_CATEGORY
+    })
+}
+export const getCategoriesSelect = ()=>{
+    return({
+        type: GET_CATEGORY_SELECT
     })
 }
 export const getCategoryDetails = (data)=>{

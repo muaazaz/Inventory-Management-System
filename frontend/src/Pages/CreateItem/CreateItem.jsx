@@ -12,7 +12,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {useDispatch, useSelector} from "react-redux"
-import { getCategories } from "../../Redux/category/categoryAction";
+import { getCategoriesSelect } from "../../Redux/category/categoryAction";
 import { getVendors } from "../../Redux/vendor/vendorAction";
 import { createItem } from "../../Redux/item/itemAction";
 
@@ -38,7 +38,7 @@ const CreateItem = () => {
     navigate("/inventory")
   };
   useEffect(()=>{
-    dispatch(getCategories())
+    dispatch(getCategoriesSelect())
     if(formData.categoryId){
       categoryData.categories.forEach((category)=>{
         if(category.id === formData.categoryId) setSubCategories(category.childern)
@@ -134,8 +134,8 @@ const CreateItem = () => {
             label={"Sub Category"}
             menuItems={subCategories}
             defaultValue={formData.subCategoryId}
-            value={"id"}
-            html={"name"}
+            value={"value"}
+            html={"label"}
             disabled={disabled}
             divider={true}
             onChange={(e)=>{setFormData({

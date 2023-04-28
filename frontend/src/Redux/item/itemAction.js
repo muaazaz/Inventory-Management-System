@@ -7,9 +7,10 @@ export const createItem = (formData)=>{
     })
 }
 
-export const getItems = ()=>{
+export const getItems = (data)=>{
     return({
-        type: GET_ITEMS
+        type: GET_ITEMS,
+        requestType: data
     })
 }
 export const getItemDetails = (data)=>{

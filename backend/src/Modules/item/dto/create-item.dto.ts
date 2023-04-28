@@ -28,4 +28,16 @@ export class CreateItemDto {
 
     @IsOptional()
     depreciationPercentage: string
+
+    @IsOptional()
+    userId: number
+
+    @IsOptional()
+    assignedById: number
+
+    @IsOptional()
+    assigned_date: string
+
+    @IsOptional()
+    faulty: boolean
 }

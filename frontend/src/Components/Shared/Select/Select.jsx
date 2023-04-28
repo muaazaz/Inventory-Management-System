@@ -29,6 +29,7 @@ const Select = ({
           <Box sx={{ width }}>
             <TextField
               select
+              required
               variant="outlined"
               sx={selectStyles}
               defaultValue={""}

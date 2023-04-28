@@ -12,7 +12,7 @@ textDiv={
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    width: "10%"
+    width: "15%"
 },
 dividerStyles = {
     margin: "1% 0"

@@ -1,6 +1,6 @@
 import { takeEvery, put } from 'redux-saga/effects'
 import { fetchRequest } from '../../utils/fetchRequest'
-import { CATEGORY_SEARCH, CREATE_CATEGORY, DELETE_CATEGORY, EDIT_CATEGORY, GET_CATEGORY, GET_CATEGORY_COUNT, GET_CATEGORY_DETAIL, SELECT_CATEGORY_BY_ORGANIZATION, SET_ALL_CATEGORY, SET_CATEGORY_COUNT, SET_CATEGORY_DETAIL, SET_CATEGORY_SEARCH, SET_CREATED_CATEGORY, SET_CREATE_CATEGORY_ERROR } from '../../Constant/reducerConstants'
+import { CATEGORY_SEARCH, CREATE_CATEGORY, DELETE_CATEGORY, EDIT_CATEGORY, GET_CATEGORY, GET_CATEGORY_COUNT, GET_CATEGORY_DETAIL, GET_CATEGORY_SELECT, SELECT_CATEGORY_BY_ORGANIZATION, SET_ALL_CATEGORY, SET_CATEGORY_COUNT, SET_CATEGORY_DETAIL, SET_CATEGORY_SEARCH, SET_CREATED_CATEGORY, SET_CREATE_CATEGORY_ERROR } from '../../Constant/reducerConstants'
 
 function* createCategory ({formData}){
     const {category, error, message} = yield fetchRequest("/category","POST", formData)
@@ -32,7 +32,11 @@ function* getCategorysCount(){
 function* searchCategory ({search, select}){
     const res = yield fetchRequest(`/category/findby?search=${search? search : ``}&select=${select? select : ``}`, "GET")
     yield put({type: SET_CATEGORY_SEARCH, payload:{category: res}})
- }
+}
+function* getCategoriesSelect(){
+    const res = yield fetchRequest('/category/select', "GET")
+    yield put({type: SET_CATEGORY_SEARCH, payload:{category: res}})
+}
 
 export default function* categorySaga() {
     yield takeEvery(GET_CATEGORY, getCategory)
@@ -41,5 +45,6 @@ export default function* categorySaga() {
     yield takeEvery(DELETE_CATEGORY, deleteCategory)
     yield takeEvery(CREATE_CATEGORY, createCategory)
     yield takeEvery(GET_CATEGORY_COUNT, getCategorysCount)
+    yield takeEvery(GET_CATEGORY_SELECT, getCategoriesSelect)
     yield takeEvery([SELECT_CATEGORY_BY_ORGANIZATION, CATEGORY_SEARCH], searchCategory)
 }

@@ -15,6 +15,24 @@ export class Category {
     @CreateDateColumn()
     created_at: Date
 
+    @Column({default: 0})
+    subCategoriesCount: number
+
+    @Column({default: 0})
+    vendorsCount: number
+
+    @Column({default: 0})
+    quantity: number
+
+    @Column({default: 0})
+    quantityAssigned: number
+
+    @Column({default: 0})
+    quantityUnassigned: number
+
+    @Column({default: 0})
+    quantityFaulty: number
+
     @ManyToOne(()=> Category, (category)=>category.childern)
     @JoinColumn()
     parent: Category

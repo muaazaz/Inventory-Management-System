@@ -492,6 +492,7 @@ const adminsLabel = [
   returnTypeOptions = [{ type: "Repair" }, { type: "Replace" }],
   returnStatusOptions = [{status: "Pending"},{status: "Approved"}],
   requestStatusOptions = [{status: "Pending"},{status: "Rejected"},{status: "Approved"}],
+  requestTypeOptions = [{type: "Acquire"}, {type: "Faulty"}],
   multiSelectOptions = [
     { label: "subCategory", value: "1" },
     { label: "subCategory", value: "2" },
@@ -539,6 +540,7 @@ export {
   returnTypeOptions,
   returnStatusOptions,
   requestStatusOptions,
+  requestTypeOptions,
   multiSelectOptions,
   vendorsLabel,
   vendorDetails,

@@ -1,17 +1,30 @@
 import { Expose, Transform } from "class-transformer";
-import { Category } from "../entities/category.entity";
 
-export class AllCategoriesDto{
+export class AllCategoryDto{
     @Expose()
     id: number
 
     @Expose()
     name: string
 
-    @Transform(({value})=>value ? value.map((child)=> ({
-        value: child.id,
-        label: child.name
-    }))  : null)
     @Expose()
-    childern: Category
+    subCategoriesCount: number
+
+    @Expose()
+    vendorsCount: number
+
+    @Transform(({obj})=>obj.childern?.map((child)=>{
+        const names = child.vendors?.map((vendor) => vendor.name) ?? [];
+        const vendorNames = names !== '' ? names.join(',') : 'No vendor found'
+        return{
+            name: child.name,
+            vendorNames,
+            quantity: child.quantity,
+            quantityAssigned: child.quantityAssigned,
+            quantityUnassigned: child.quantityUnassigned,
+            quantityFaulty: child.quantityFaulty
+        }
+    }))
+    @Expose()
+    subCategories: any
 }

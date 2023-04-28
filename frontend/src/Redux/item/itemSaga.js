@@ -27,8 +27,8 @@ function* createItem({ formData }) {
     put({ type: SET_CREATED_ITEM, payload: { item } });
   }
 }
-function* getItems() {
-  const res = yield fetchRequest("/items", "GET");
+function* getItems({requestType}) {
+  const res = yield fetchRequest(`/items?type=${requestType ? requestType : ''}`, "GET");
   yield put({ type: SET_ALL_ITEMS, payload: { items: res } });
 }
 function* getItemDetails({ id }) {

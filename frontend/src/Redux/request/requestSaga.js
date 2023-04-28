@@ -18,7 +18,7 @@ import {
 
 function* createRequest({ formData }) {
   const { request, error, message } = yield fetchRequest(
-    "/requests",
+    "/request",
     "POST",
     formData
   );

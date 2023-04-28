@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   addButton,
   divider,
@@ -20,9 +20,17 @@ import {
 import { categoryData, categoryLabel } from "../../Constant/dummyData";
 import { useNavigate } from "react-router-dom";
 import CollapsibleTable from "../../Components/Shared/CollapseTable/CollapseTable";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategories } from "../../Redux/category/categoryAction";
 const Category = () => {
   const navigate = useNavigate(),
+    dispatch = useDispatch(),
+    {categories} = useSelector((state)=>state.categoryData),
     [search, setSearch] = useState("");
+
+  useEffect(()=>{
+    dispatch(getCategories())
+  },[dispatch])
   const handleSearch = () => {
     console.log(search);
   };
@@ -64,7 +72,7 @@ const Category = () => {
       <Divider sx={divider} />
       <CollapsibleTable
         label={categoryLabel}
-        data={categoryData}
+        data={categories ? categories : []}
         viewRoute={"details/"}
         rowsPerPage={10}
       />

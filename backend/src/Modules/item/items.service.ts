@@ -1,7 +1,7 @@
-import { Injectable, UseGuards } from '@nestjs/common';
+import { Inject, Injectable, UseGuards, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtAuthGuard } from 'src/guards/Jwt.auth.guard';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { CategoryService } from '../category/category.service';
 import { Category } from '../category/entities/category.entity';
 import { UserService } from '../user/user.service';
@@ -15,6 +15,7 @@ import { VendorsService } from '../vendor/vendors.service';
 export class ItemsService {
   constructor(@InjectRepository(Item)
   private repo: Repository<Item>,
+    @Inject(forwardRef(()=>CategoryService))
     private categoryService: CategoryService,
     private userService: UserService,
     private vendorService: VendorsService
@@ -30,13 +31,32 @@ export class ItemsService {
     return this.repo.save(item);
   }
 
-  findAll(user: any) {
-    return this.repo.find({
-      relations: ['category', 'category.parent', 'category.organization'], where: { category: { organization: { id: user.organizationId } } },
-      order: {
-        id: "ASC"
-      }
-    });
+  findAll(user: any, type: string) {
+    switch (type) {
+      case "Acquire":
+        return this.repo.find({
+          relations: ['category', 'category.parent', 'category.organization'],
+          where: { category: { organization: { id: user.organizationId } }, assigned_to: IsNull() },
+          order: {
+            id: "ASC"
+          }
+        });
+      case "Faulty":
+        return this.repo.find({
+          relations: ['category', 'category.parent', 'category.organization'],
+          where: { assigned_to: { id: user.id } },
+          order: {
+            id: "ASC"
+          }
+        });
+      default:
+        return this.repo.find({
+          relations: ['category', 'category.parent', 'category.organization'], where: { category: { organization: { id: user.organizationId } } },
+          order: {
+            id: "ASC"
+          }
+        });
+    }
   }
 
   findOne(id: number) {
@@ -49,7 +69,7 @@ export class ItemsService {
       const user = await this.userService.findOne(updateItemDto.userId)
       item.assigned_to = user
     }
-    if(updateItemDto.assignedById){
+    if (updateItemDto.assignedById) {
       const user = await this.userService.findOne(updateItemDto.assignedById)
       item.assigned_by = user
     }
@@ -128,5 +148,18 @@ export class ItemsService {
 
       return items
     }
+  }
+
+  async setItemQuantityCount(subCategory: any) {
+    const quantity = await this.repo.count({ relations: ['category'], where: { category: { id: subCategory.id } } })
+    const quantityAssigned = await this.repo.count({ relations: ['category'], where: { category: { id: subCategory.id }, assigned_to: Not(IsNull()) } })
+    const quantityUnassigned = await this.repo.count({ relations: ['category'], where: { category: { id: subCategory.id }, assigned_to: IsNull() } })
+    const quantityFaulty = await this.repo.count({relations: ['category'], where:{category:{id: subCategory.id}, faulty: true}})
+
+    subCategory.quantity = quantity
+    subCategory.quantityAssigned = quantityAssigned
+    subCategory.quantityUnassigned = quantityUnassigned
+    subCategory.quantityFaulty = quantityFaulty
+
   }
 }

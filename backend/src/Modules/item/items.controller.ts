@@ -39,8 +39,8 @@ export class ItemsController {
   @Serialize(AllItemsDto)
   @Roles(Role.Admin, Role.Employee)
   @Get()
-  findAll(@UserDecorator() user: any) {
-    return this.itemsService.findAll(user);
+  findAll(@UserDecorator() user: any, @Query() query: any) {
+    return this.itemsService.findAll(user, query.type);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
