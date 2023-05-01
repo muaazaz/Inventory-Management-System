@@ -7,50 +7,41 @@ import {
   cancelButton,
   addButton,
 } from "./styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Input from "../../Components/Shared/Input/Input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import { categoryDetail } from "../../Constant/dummyData";
-import queryString from "query-string";
+import { useDispatch } from "react-redux";
+import { createCategory } from "../../Redux/category/categoryAction";
 
 const CreateCategory = () => {
   const navigate = useNavigate(),
-    queryParams = queryString.parse(window.location.search),
+    {id} = useParams(),
     [name, setName] = useState(""),
-    [inputArray, setInputArray] = useState([]),
+    [inputArray, setInputArray] = useState([{
+      name: "Sub-Category# 1 Name",
+      placeHolder: "Sub-Category# 1 Name",
+      value: "",
+    },]),
     [subCategories, setSubCategories] = useState([]),
-    [newSubCategories, setNewSubCategories] = useState([]),
-    [addNew, setAddNew] = useState(false),
-    [counter, setCounter] = useState(2);
+    [counter, setCounter] = useState(2),
+    dispatch = useDispatch()
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (addNew) {
-      const filtered =newSubCategories.filter(category=>category)
-      console.log({newSubCategories: filtered});
-    } else {
-      console.log({ name, subCategories });
-    }
+    dispatch( createCategory({name, subCategories }));
+    navigate(-1)
   };
   const handleSubCategoryInputChange = (e) => {
     e.preventDefault();
-
     const index = e.target.id;
-    if (!addNew) {
       setSubCategories((s) => {
         const newArr = s.slice();
         newArr[index] = { name: e.target.value };
         return newArr;
       });
-    } else {
-      setNewSubCategories((s) => {
-        const newArr = s.slice();
-        newArr[index] = { name: e.target.value };
-        return newArr;
-      });
-    }
+
   };
   const addSubCategoryInput = () => {
     setCounter(counter + 1);
@@ -64,35 +55,7 @@ const CreateCategory = () => {
       ];
     });
   };
-  useEffect(() => {
-    switch (queryParams.type) {
-      case "new":
-        setAddNew(true);
-        setName(categoryDetail.name);
-        const newArray = [];
-        categoryDetail.subCategories.forEach((category, i) => {
-          newArray.push({
-            name: "Sub-Category# " + (i + 1) + " Name",
-            placeHolder: "",
-            value: category.name,
-            disable: true
-          });
-          setCounter(i + 2);
-        });
-        setInputArray(newArray);
-        break;
 
-      default:
-        setInputArray([
-          {
-            name: "Sub-Category# 1 Name",
-            placeHolder: "Sub-Category# 1 Name",
-            value: "",
-          },
-        ]);
-        break;
-    }
-  }, [queryParams.type]);
   return (
     <Box sx={createMainDiv}>
       <Box sx={header}>

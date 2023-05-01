@@ -32,7 +32,7 @@ import CreateComplaint from "../../Pages/CreateComplaints/CreateComplaints";
 import EmployeeEdit from "../../Pages/EmployeeEdit/EmployeeEdit";
 import CreateRequest from "../../Pages/CreateRequest/CreateRequest";
 import ForgotPassword from "../../Pages/ForgotPassword/ForgotPassword";
-import EditCategory from "../../Pages/EditCategpry/EditCategory";
+import EditCategory from "../../Pages/EditCategory/EditCategory";
 import EditOrganization from "../../Pages/EditOrganization/EditOrganization";
 import CreateUser from "../../Pages/CreateUser/CreateUser";
 import CreateOrg from "../../Pages/CreateOrganization/CreateOrg";
@@ -40,6 +40,7 @@ import EditUser from "../../Pages/EditUser/EditUser";
 import EditDepartment from "../../Pages/EditDepartment/EditDepartment";
 import EditItem from "../../Pages/EditItem/EditItem";
 import EditVendor from "../../Pages/EditVendor/EditVendor";
+import AddNewSubCategory from "../../Pages/AddNewSubCategory/AddNewSubCategory";
 
 function Router() {
   return (
@@ -80,7 +81,7 @@ function Router() {
           <Route path="inventory/details/:id" element={<ItemDetails />} />
           <Route path="categories" element={<Category />} />
           <Route path="categories/create" element={<CreateCategory />} />
-          <Route path="categories/add/:id" element={<CreateCategory />} />
+          <Route path="categories/add/:id" element={<AddNewSubCategory />} />
           <Route path="categories/edit/:id" element={<EditCategory />} />
           <Route path="categories/details/:id" element={<CategoryDetails />} />
           <Route path="returns" element={<Returns />} />

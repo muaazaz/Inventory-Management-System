@@ -8,7 +8,7 @@ import { Box, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { headerText, mainDiv, stats, tableDiv } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
-import { getComplaints } from "../../Redux/complaint/complaintAction";
+import { getComplaintCount, getComplaints } from "../../Redux/complaint/complaintAction";
 import { getUserCount } from "../../Redux/user/userAction";
 import { getItemCount } from "../../Redux/item/itemAction";
 import { getVendorsCount } from "../../Redux/vendor/vendorAction";
@@ -21,9 +21,11 @@ const AdminDashboard = () => {
   useEffect(() => {
     dispatch(getUserCount());
     dispatch(getComplaints());
+    dispatch(getComplaintCount())
     dispatch(getItemCount());
     dispatch(getVendorsCount());
     dispatch(getCategoryCount());
+    console.log(complaintData.monthlyCount)
   }, [dispatch]);
 
   return (

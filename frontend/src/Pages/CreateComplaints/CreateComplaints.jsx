@@ -28,6 +28,7 @@ const CreateComplaint = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createComplaint(formData))
+    navigate(-1)
   };
   return (
     <Box sx={main}>

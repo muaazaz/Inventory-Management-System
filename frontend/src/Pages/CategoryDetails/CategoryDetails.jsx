@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Divider,
@@ -6,7 +7,7 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { headerDiv, headerText, mainDiv, viewButton } from "./styles";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -14,13 +15,20 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ViewContent from "../../Components/Shared/ViewContent/ViewContent";
-import { subCategoryDetails, vendors } from "../../Constant/dummyData";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteCategory,
+  getCategoryDetails,
+} from "../../Redux/category/categoryAction";
 
 const CategoryDetails = () => {
   const [open, setOpen] = useState(false),
-    {id} = useParams(),
+    { id } = useParams(),
     [anchorEl, setAnchorEl] = useState(null),
-    navigate = useNavigate();
+    navigate = useNavigate(),
+    dispatch = useDispatch(),
+    { categoryDetail } = useSelector((state) => state.categoryData);
+
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
     setOpen(true);
@@ -29,6 +37,10 @@ const CategoryDetails = () => {
     setAnchorEl(null);
     setOpen(false);
   };
+
+  useEffect(() => {
+    dispatch(getCategoryDetails(id));
+  }, [dispatch]);
   return (
     <Box sx={mainDiv}>
       <Box sx={headerDiv}>
@@ -47,34 +59,55 @@ const CategoryDetails = () => {
         </Button>
         <Menu open={open} anchorEl={anchorEl} onClose={handleClose}>
           <MenuItem>
-            <Button startIcon={<EditOutlinedIcon />} onClick={()=>{navigate("/categories/edit/"+id)}}>Edit</Button>
+            <Button
+              startIcon={<EditOutlinedIcon />}
+              onClick={() => {
+                navigate("/categories/edit/" + id);
+              }}
+            >
+              Edit
+            </Button>
           </MenuItem>
           <Divider />
           <MenuItem>
-            <Button startIcon={<DeleteOutlineOutlinedIcon />} color="error">
+            <Button
+              startIcon={<DeleteOutlineOutlinedIcon />}
+              color="error"
+              onClick={() => {
+                dispatch(deleteCategory(id));
+                navigate(-1);
+              }}
+            >
               Delete
             </Button>
           </MenuItem>
         </Menu>
       </Box>
       <Divider sx={{ m: 3 }} />
-      {Object.entries(subCategoryDetails).map(([key, val])=>(
-        <ViewContent 
-            label={key}
-            detail={val}
-            divider={true}
-        />
-      ))}
+      {categoryDetail &&
+        Object.entries(categoryDetail).map(([key, val], i) => (
+          <Fragment key={i}>
+            {key !== "vendors" && key !== "childern" && (
+              <ViewContent label={key} detail={val} divider={true} />
+            )}
+          </Fragment>
+        ))}
       <Typography sx={headerText}>Vendors</Typography>
-      {vendors.map((vendor) => (
-        <Box sx={{ display: "flex" }}>
-          <ViewContent label={"Name"} detail={vendor.Name} />
-          <ViewContent
-            label={"Contact Number"}
-            detail={vendor["Contact Number"]}
-          />
-        </Box>
-      ))}
+      {categoryDetail && categoryDetail.vendors.length !== 0 ? (
+        categoryDetail.vendors.map((vendor, i) => (
+          <Box sx={{ display: "flex" }} key={i}>
+            <ViewContent label={"Name"} detail={vendor.vendorName} />
+            <ViewContent
+              label={"Contact Number"}
+              detail={vendor["contactNo"]}
+            />
+          </Box>
+        ))
+      ) : (
+        <Alert severity="info" sx={{ margin: "1%" }}>
+          There Are No Vendors Dealing In This Category Yet
+        </Alert>
+      )}
     </Box>
   );
 };

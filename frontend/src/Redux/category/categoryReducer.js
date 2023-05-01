@@ -4,7 +4,6 @@ import {
   SET_CATEGORY_COUNT,
   SET_CATEGORY_DETAIL,
   SET_CATEGORY_SEARCH,
-  SET_CATEGORY_SELECT,
   SET_CREATED_CATEGORY,
   SET_CREATE_CATEGORY_ERROR,
 } from "../../Constant/reducerConstants";
@@ -40,7 +39,7 @@ const categoryData = (state = [], action) => {
     case DELETE_CATEGORY:
       return {
         ...state,
-        category: state.Categorys.filter(
+        category: state.categories.filter(
           (category) => category.id !== action.id
         ),
       };

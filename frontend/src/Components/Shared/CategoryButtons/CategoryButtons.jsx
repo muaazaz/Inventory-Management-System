@@ -3,16 +3,19 @@ import AddIcon from "@mui/icons-material/Add";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteCategory } from "../../../Redux/category/categoryAction";
 
-const ActionButton = ({id}) => {
-  const navigate = useNavigate();
+const CategoryButtons = ({id}) => {
+  const navigate = useNavigate(),
+  dispatch = useDispatch()
   return (
     <TableCell align="center">
       <Button
         sx={{ color: "#00A572" }}
         startIcon={<AddIcon />}
         onClick={() => {
-          navigate("add/"+id+"?type=new");
+          navigate("add/"+id);
         }}
       >
         ADD
@@ -24,11 +27,13 @@ const ActionButton = ({id}) => {
       >
         {<EditOutlinedIcon sx={{ color: "black" }} />}
       </Button>
-      <Button onClick={() => {}}>
+      <Button onClick={() => {
+        dispatch(deleteCategory(id))
+      }}>
         {<DeleteOutlinedIcon sx={{ color: "red" }} />}
       </Button>
     </TableCell>
   );
 };
 
-export default ActionButton;
+export default CategoryButtons;

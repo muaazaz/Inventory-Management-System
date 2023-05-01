@@ -1,19 +1,33 @@
 import { Box, Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Input from "../../Components/Shared/Input/Input";
 import { cancelButton, mainDiv, saveButton } from "./styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  editCategory,
+  getCategoryDetails,
+} from "../../Redux/category/categoryAction";
 
 const EditCategory = () => {
   const { id } = useParams(),
     [name, setName] = useState(""),
-    navigate = useNavigate();
+    navigate = useNavigate(),
+    dispatch = useDispatch(),
+    { categoryDetail } = useSelector((state) => state.categoryData);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ name, id });
+    dispatch(editCategory({ id, formData: { name } }));
+    navigate(-1)
   };
+  useEffect(() => {
+    dispatch(getCategoryDetails(id));
+    if (categoryDetail) {
+      setName(categoryDetail.name);
+    }
+  }, [dispatch, categoryDetail]);
   return (
     <Box sx={mainDiv}>
       <Button
@@ -47,6 +61,7 @@ const EditCategory = () => {
         <Input
           name={"Category Name"}
           placeHolder={"Category Name"}
+          value={name}
           onChange={(e) => {
             setName(e.target.value);
           }}

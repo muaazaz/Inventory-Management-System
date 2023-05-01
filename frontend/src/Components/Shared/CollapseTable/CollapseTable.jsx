@@ -11,7 +11,7 @@ import TableRow from "@mui/material/TableRow";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { subCategoryLabel } from "../../../Constant/dummyData";
-import { Button, Pagination } from "@mui/material";
+import { Alert, Button, Pagination } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
   nestedTableCell,
@@ -19,9 +19,9 @@ import {
   tableHead,
   tableHeaderCell,
 } from "./styles";
-import ActionButton from "../ActionButton/ActionButton";
+import CategoryButtons from "../CategoryButtons/CategoryButtons";
 
-function Row({ row, viewRoute}) {
+function Row({ row, viewRoute }) {
   const navigate = useNavigate(),
     [open, setOpen] = React.useState(false);
 
@@ -35,7 +35,7 @@ function Row({ row, viewRoute}) {
             )}
           </React.Fragment>
         ))}
-        <ActionButton id={row.id} />
+        <CategoryButtons id={row.id} />
         <TableCell>
           <IconButton
             aria-label="expand row"
@@ -66,7 +66,7 @@ function Row({ row, viewRoute}) {
                       <TableCell component="th" scope="row" align="center">
                         {obj.name}
                       </TableCell>
-                      <TableCell align="center">{obj.vendorName}</TableCell>
+                      <TableCell align="center">{obj.vendorNames}</TableCell>
                       <TableCell align="center">{obj.quantity}</TableCell>
                       <TableCell align="center">
                         {obj.quantityAssigned}
@@ -96,46 +96,54 @@ function Row({ row, viewRoute}) {
   );
 }
 
-export default function CollapsibleTable({ label, data, viewRoute, rowsPerPage, hidden }) {
-  const [page, setPage] = React.useState(1)
-  
+export default function CollapsibleTable({
+  label,
+  data,
+  viewRoute,
+  rowsPerPage,
+  hidden,
+}) {
+  const [page, setPage] = React.useState(1);
+
   let round = 0,
-  count = 0;
-//Calculating no of pages
-if (data.length / rowsPerPage < 1) {
-  count = 1;
-} else {
-  if (data.length % rowsPerPage > 0 && data.length / rowsPerPage !== 1) {
-    round = 1;
+    count = 0;
+  //Calculating no of pages
+  if (data?.length / rowsPerPage < 1) {
+    count = 1;
   } else {
-    round = 0;
+    if (data?.length % rowsPerPage > 0 && data.length / rowsPerPage !== 1) {
+      round = 1;
+    } else {
+      round = 0;
+    }
+    count = parseInt(data?.length / rowsPerPage) + round;
   }
-  count = parseInt(data.length / rowsPerPage) + round;
-}
-//Handeling rows to show per page for every page change
-const handlePageChange = (event, value) => {
-  setPage(value);
-};
+  //Handeling rows to show per page for every page change
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
   return (
-    <TableContainer sx={tableContainer}>
-      <Table aria-label="collapsible table">
-        <TableHead sx={tableHead}>
-          <TableRow>
-            {label.map((item, i) => (
-              <TableCell key={i} sx={tableHeaderCell} align="center">
-                {item}
-              </TableCell>
-            ))}
-            <TableCell />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map((row) => (
-            <Row key={row.name} row={row} viewRoute={viewRoute}/>
-          ))}
-        </TableBody>
-      </Table>
-      <Pagination
+    <>
+      {data.length > 0 ? (
+        <TableContainer sx={tableContainer}>
+          <Table aria-label="collapsible table">
+            <TableHead sx={tableHead}>
+              <TableRow>
+                {label.map((item, i) => (
+                  <TableCell key={i} sx={tableHeaderCell} align="center">
+                    {item}
+                  </TableCell>
+                ))}
+                <TableCell />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data?.map((row) => (
+                <Row key={row.name} row={row} viewRoute={viewRoute} />
+              ))}
+            </TableBody>
+          </Table>
+          <Pagination
             className="pagination"
             variant="outlined"
             color="primary"
@@ -146,6 +154,10 @@ const handlePageChange = (event, value) => {
             page={page}
             onChange={handlePageChange}
           />
-    </TableContainer>
+        </TableContainer>
+      ) : (
+        <Alert severity="info">There Are No Records To Show</Alert>
+      )}
+    </>
   );
 }

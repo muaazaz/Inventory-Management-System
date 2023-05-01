@@ -15,8 +15,9 @@ export class AllCategoryDto{
 
     @Transform(({obj})=>obj.childern?.map((child)=>{
         const names = child.vendors?.map((vendor) => vendor.name) ?? [];
-        const vendorNames = names !== '' ? names.join(',') : 'No vendor found'
+        const vendorNames = names.length !== 0 ? names.join(',') : 'No vendor found'
         return{
+            id: child.id,
             name: child.name,
             vendorNames,
             quantity: child.quantity,

@@ -137,10 +137,10 @@ export class ComplaintsService {
     const where = user.role === 'superadmin' ? 'user.role = ' + roleId : 'user.role=' + roleId + ' AND user.organization = ' + user.organizationId
 
     const monthlyCount = await this.repo.createQueryBuilder('complaint')
-      .select("TO_CHAR(TO_DATE(EXTRACT(Month from complaint.created_at)::text, 'MM'), 'Mon') AS month, EXTRACT(Month from complaint.created_at) AS monthNo, status, count(*)")
+      .select("status, TO_CHAR(TO_DATE(EXTRACT(Month from complaint.created_at)::text, 'MM'), 'Mon') AS month, EXTRACT(Month from complaint.created_at) AS monthNo, COUNT(*), status")
       .innerJoin(User, "user", "user.id = complaint.userId")
       .where(where)
-      .groupBy('status,month,monthNo')
+      .groupBy('month, monthNo, status')
       .orderBy('monthNo', 'ASC')
       .getRawMany()
 

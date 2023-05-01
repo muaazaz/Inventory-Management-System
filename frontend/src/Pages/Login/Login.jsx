@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -80,7 +80,7 @@ const Login = () => {
         >
           Sign In
         </Button>
-        <Typography>{error}</Typography>
+        {error && <Alert severity="error">{error}</Alert>}
       </Box>
       <Typography
         sx={{ color: "gray", textAlign: "center" }}

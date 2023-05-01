@@ -10,6 +10,7 @@ import { Role } from 'src/enums/role.enum';
 import { Serialize } from 'src/decorators/serialize.decorator';
 import { SelectCategoriesDto } from './dto/select-category.dto';
 import { AllCategoryDto } from './dto/all-category.dto';
+import { CategoryDetailDto } from './dto/category-details.dto';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('category')
@@ -36,6 +37,15 @@ export class CategoryController {
     return this.categoryService.findSelectOptions(user);
   }
 
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Serialize(AllCategoryDto)
+  @Roles(Role.Admin, Role.Employee)
+  @Get("findBy")
+  findBySearch(@Query() query: any, @UserDecorator() user: any) {
+    return this.categoryService.findBySearch(query.search, user);
+  }
+
   @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(AllCategoryDto)
   @Roles(Role.Admin, Role.Employee)
@@ -44,6 +54,8 @@ export class CategoryController {
     return this.categoryService.findAll(user);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Serialize(CategoryDetailDto)
   @Roles(Role.Admin)
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -52,8 +64,8 @@ export class CategoryController {
 
   @Roles(Role.Admin)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoryService.update(+id, updateCategoryDto);
+  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto, @UserDecorator() user: any) {
+    return this.categoryService.update(+id, updateCategoryDto, user);
   }
 
   @Roles(Role.Admin)

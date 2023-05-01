@@ -17,23 +17,24 @@ import {
   main,
   searchStyles,
 } from "./styles";
-import { categoryData, categoryLabel } from "../../Constant/dummyData";
+import { categoryLabel } from "../../Constant/dummyData";
 import { useNavigate } from "react-router-dom";
 import CollapsibleTable from "../../Components/Shared/CollapseTable/CollapseTable";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategories } from "../../Redux/category/categoryAction";
+import { getCategories, searchCategory } from "../../Redux/category/categoryAction";
 const Category = () => {
   const navigate = useNavigate(),
+    [once, setOnce] = useState(false),
     dispatch = useDispatch(),
-    {categories} = useSelector((state)=>state.categoryData),
-    [search, setSearch] = useState("");
-
+    {categories} = useSelector((state)=>state.categoryData);
+    
   useEffect(()=>{
-    dispatch(getCategories())
-  },[dispatch])
-  const handleSearch = () => {
-    console.log(search);
-  };
+    if(!once){
+      dispatch(getCategories())
+      setOnce(true)
+    }
+  },[dispatch, categories])
+  
   return (
     <Box sx={main}>
       <Box sx={headerDiv}>
@@ -43,14 +44,13 @@ const Category = () => {
             sx={{ textAlign: "center", m: 1 }}
             placeholder="Search something..."
             onChange={(e) => {
-              setSearch(e.target.value);
+              dispatch(searchCategory(e.target.value))
             }}
           />
           <IconButton
             type="button"
             sx={{ p: "5%" }}
             color="primary"
-            onClick={handleSearch}
           >
             <SearchIcon />
           </IconButton>
