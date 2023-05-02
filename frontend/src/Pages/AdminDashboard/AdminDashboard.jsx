@@ -2,13 +2,16 @@ import BarChart from "../../Components/Shared/BarChart/BarChart";
 import Cards from "../../Components/Shared/Cards/Cards";
 import { Link } from "react-router-dom";
 import Tables from "../../Components/Shared/Tables/Tables";
-import { adminEmpComplaintLabel } from "../../Constant/dummyData";
+import { adminEmpComplaintLabel } from "../../Constant/tablesData";
 import "./dashboard.css";
 import { Box, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { headerText, mainDiv, stats, tableDiv } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
-import { getComplaintCount, getComplaints } from "../../Redux/complaint/complaintAction";
+import {
+  getComplaintCount,
+  getComplaints,
+} from "../../Redux/complaint/complaintAction";
 import { getUserCount } from "../../Redux/user/userAction";
 import { getItemCount } from "../../Redux/item/itemAction";
 import { getVendorsCount } from "../../Redux/vendor/vendorAction";
@@ -16,16 +19,21 @@ import { getCategoryCount } from "../../Redux/category/categoryAction";
 
 const AdminDashboard = () => {
   const dispatch = useDispatch(),
-    { complaintData, userData, itemData, vendorData, categoryData } = useSelector((state) => state);
+    {
+      complaintData,
+      userData,
+      itemData,
+      vendorData,
+      categoryData,
+    } = useSelector((state) => state);
 
   useEffect(() => {
     dispatch(getUserCount());
     dispatch(getComplaints());
-    dispatch(getComplaintCount())
+    dispatch(getComplaintCount());
     dispatch(getItemCount());
     dispatch(getVendorsCount());
     dispatch(getCategoryCount());
-    console.log(complaintData.monthlyCount)
   }, [dispatch]);
 
   return (
@@ -34,26 +42,40 @@ const AdminDashboard = () => {
       <Box sx={stats}>
         <Cards
           title={"Employees"}
-          amount={userData?.totalCount ? userData.totalCount : "0" }
-          info={`${userData?.currentMonthCount?.count ? userData.currentMonthCount.count : "0"} New Employees added this month`}
+          amount={userData?.totalCount ? userData.totalCount : "0"}
+          info={`${
+            userData?.currentMonthCount?.count
+              ? userData.currentMonthCount.count
+              : "0"
+          } New Employees added this month`}
           color={"success"}
         />
         <Cards
           title={"Inventory Items"}
           amount={itemData?.totalCount ? itemData.totalCount : "0"}
-          info={`${itemData?.currentMonthCount?.count ? itemData.currentMonthCount.count : "0"} New Items added this month`}
+          info={`${
+            itemData?.currentMonthCount?.count
+              ? itemData.currentMonthCount.count
+              : "0"
+          } New Items added this month`}
           color={"success"}
         />
         <Cards
           title={"Vendors"}
           amount={vendorData?.totalCount ? vendorData.totalCount : "0"}
-          info={`${vendorData?.currentMonthCount? vendorData.currentMonthCount : "0"} New Vendors added this month`}
+          info={`${
+            vendorData?.currentMonthCount ? vendorData.currentMonthCount : "0"
+          } New Vendors added this month`}
           color={"success"}
         />
         <Cards
           title={"Categories"}
           amount={categoryData?.totalCount ? categoryData.totalCount : "0"}
-          info={`${categoryData?.currentMonthCount?.count ? categoryData.currentMonthCount.count : "0"} New Categories added this month`}
+          info={`${
+            categoryData?.currentMonthCount?.count
+              ? categoryData.currentMonthCount.count
+              : "0"
+          } New Categories added this month`}
           color={"success"}
         />
       </Box>
@@ -66,10 +88,24 @@ const AdminDashboard = () => {
         }}
       >
         <Box sx={{ width: "50%" }}>
-          <BarChart />
+          <BarChart 
+            dualLineChart 
+            data={itemData.monthlyCount ? itemData.monthlyCount : []}
+            defaultOpt={"category"}
+            opt1={"Unassigned"}
+            opt2={"Assigned"}
+            label={[["Category", "Unassigned", "Assigned"]]}
+          />
         </Box>
         <Box sx={{ width: "50%" }}>
-          <BarChart />
+          <BarChart
+            dualLineChart
+            data={complaintData.monthlyCount ? complaintData.monthlyCount : []}
+            defaultOpt={"month"}
+            opt1={"Pending"}
+            opt2={"Resolved"}
+            label={[["Month", "Pending", "Resolved"]]}
+          />
         </Box>
       </Box>
       <Box sx={tableDiv}>

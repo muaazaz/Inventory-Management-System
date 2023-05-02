@@ -1,24 +1,36 @@
-import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { contentDiv, logo, mainDiv } from "./styles";
+import { useDispatch, useSelector } from "react-redux";
+import { generateOtp, updatePassword } from "../../Redux/user/userAction";
+
 const ForgotPassword = () => {
-  const otp = "784RE1";
   const [formData, setFormData] = useState({
       email: "",
+      otp: "",
       newPassword: "",
     }),
     [step, setStep] = useState(0),
     [btnText, setBtnText] = useState("Send Otp"),
     [error, setError] = useState(""),
     [validOtp, setValidOtp] = useState(false),
-    [disable, setDisable] = useState(""),
-    navigate = useNavigate();
+    [disable, setDisable] = useState(false),
+    navigate = useNavigate(),
+    dispatch = useDispatch(),
+    { otp } = useSelector((state) => state.userValidation);
 
   const handleClick = () => {
-    console.log(step);
     switch (step) {
       case 0:
+        dispatch(generateOtp({email: formData.email}))
         setBtnText("Verify Otp");
         setStep(step + 1);
         break;
@@ -32,6 +44,7 @@ const ForgotPassword = () => {
         }
         break;
       case 2:
+        dispatch(updatePassword(formData))
         navigate("/login");
         break;
 
@@ -39,6 +52,9 @@ const ForgotPassword = () => {
         break;
     }
   };
+
+  useEffect(() => {}, [otp]);
+
   return (
     <Box sx={mainDiv}>
       <Avatar sx={logo} src="/gigalabs.png" variant="rounded" />
@@ -54,7 +70,7 @@ const ForgotPassword = () => {
           Enter your email address to verify and change password
         </Typography>
         <TextField
-          sx={{ width: "80%" }}
+          sx={{ width: "80%", m: 1 }}
           label="Email"
           placeholder="Enter your Email address"
           value={formData.email}
@@ -68,21 +84,26 @@ const ForgotPassword = () => {
         ></TextField>
         {step >= 1 && (
           <TextField
-            sx={{ width: "80%" }}
+            sx={{ width: "80%", m: 1 }}
             label="Otp"
-            placeholder="Enter otp sent to you email"
+            placeholder="Enter otp sent to your email"
             defaultValue={""}
             disabled={step >= 2}
             onChange={(e) => {
-              setError("");
-              setValidOtp(otp === e.target.value);
+                setValidOtp(otp === e.target.value);
+                setFormData({
+                  ...formData,
+                  otp: e.target.value,
+                });
+                setError("");
             }}
           ></TextField>
         )}
         {step === 2 && validOtp && (
           <>
             <TextField
-              sx={{ width: "80%" }}
+              sx={{ width: "80%", m: 1 }}
+              type="password"
               label="New Password"
               placeholder="Enter your new password"
               value={formData.newPassword}
@@ -94,13 +115,15 @@ const ForgotPassword = () => {
               }}
             ></TextField>
             <TextField
-              sx={{ width: "80%" }}
+              sx={{ width: "80%", m: 1 }}
               label="Confirm Password"
+              type="password"
               placeholder="Enter the password exactly as above"
               defaultValue={""}
               onChange={(e) => {
                 if (formData.newPassword !== e.target.value) {
                   setError("Both passwords must be same");
+                  setDisable(true);
                 } else {
                   setError("");
                   setDisable(false);
@@ -111,14 +134,14 @@ const ForgotPassword = () => {
         )}
         <Button
           color="success"
-          sx={{ width: "80%", backgroundColor: "#00A572" }}
+          sx={{ width: "80%", backgroundColor: "#00A572", m: 1 }}
           variant="contained"
           disabled={disable}
           onClick={handleClick}
         >
           {btnText}
         </Button>
-        {error && <Typography>{error}</Typography>}
+        {error && <Alert severity="error">{error}</Alert>}
       </Box>
       <Typography
         sx={{ color: "gray", textAlign: "center" }}
@@ -133,6 +156,7 @@ const ForgotPassword = () => {
         >
           Change
         </Button>
+        <Button></Button>
       </Typography>
     </Box>
   );

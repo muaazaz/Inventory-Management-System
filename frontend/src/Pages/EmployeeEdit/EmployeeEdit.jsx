@@ -13,7 +13,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Input from "../../Components/Shared/Input/Input";
-import { ownInventoryLabel } from "../../Constant/dummyData";
+import { ownInventoryLabel } from "../../Constant/tablesData";
 import Tables from "../../Components/Shared/Tables/Tables";
 import PhotoUpload from "../../Components/Shared/PhotoUpload/PhotoUpload";
 import "./employeeEdit.css"

@@ -10,7 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { subCategoryLabel } from "../../../Constant/dummyData";
+import { subCategoryLabel } from "../../../Constant/tablesData";
 import { Alert, Button, Pagination } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {

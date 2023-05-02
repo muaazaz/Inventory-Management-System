@@ -17,7 +17,7 @@ import {
   main,
   searchStyles,
 } from "./styles";
-import { categoryLabel } from "../../Constant/dummyData";
+import { categoryLabel } from "../../Constant/tablesData";
 import { useNavigate } from "react-router-dom";
 import CollapsibleTable from "../../Components/Shared/CollapseTable/CollapseTable";
 import { useDispatch, useSelector } from "react-redux";

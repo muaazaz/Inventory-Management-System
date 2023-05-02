@@ -2,7 +2,7 @@ import Tables from "../../Components/Shared/Tables/Tables";
 import { Box, Button, IconButton, InputBase, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
-import { vendorsLabel } from "../../Constant/dummyData";
+import { vendorsLabel } from "../../Constant/tablesData";
 import { searchStyles, headerDiv, headerText, main } from "./styles";
 import { useEffect, useState } from "react";
 import Select from "../../Components/Shared/Select/Select";

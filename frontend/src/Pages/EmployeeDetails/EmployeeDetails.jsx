@@ -7,7 +7,7 @@ import ViewContent from "../../Components/Shared/ViewContent/ViewContent";
 import {
   InventoryLabel,
   requestsLabel,
-} from "../../Constant/dummyData";
+} from "../../Constant/tablesData";
 import { useEffect, useState } from "react";
 import Tables from "../../Components/Shared/Tables/Tables";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";

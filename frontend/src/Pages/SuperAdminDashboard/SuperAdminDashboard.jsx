@@ -2,7 +2,7 @@ import BarChart from "../../Components/Shared/BarChart/BarChart";
 import Cards from "../../Components/Shared/Cards/Cards";
 import { Link } from "react-router-dom";
 import Tables from "../../Components/Shared/Tables/Tables";
-import { complaintLabel } from "../../Constant/dummyData";
+import { complaintLabel } from "../../Constant/tablesData";
 import "./superAdminDashboard.css";
 import { Box, Typography,  Tab, Tabs } from "@mui/material";
 import { useEffect, useState } from "react";

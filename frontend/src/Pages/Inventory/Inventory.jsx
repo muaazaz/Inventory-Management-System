@@ -19,7 +19,7 @@ import {
   searchStyles,
 } from "./styles";
 import Tables from "../../Components/Shared/Tables/Tables";
-import { InventoryLabel } from "../../Constant/dummyData";
+import { InventoryLabel } from "../../Constant/tablesData";
 import { useNavigate } from "react-router-dom";
 import Select from "../../Components/Shared/Select/Select";
 import { useDispatch, useSelector } from "react-redux";

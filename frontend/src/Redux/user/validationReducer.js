@@ -1,4 +1,4 @@
-import { LOG_OUT, SET_ERROR, SET_USER } from "../../Constant/reducerConstants";
+import { LOG_OUT, SET_ERROR, SET_OTP, SET_USER } from "../../Constant/reducerConstants";
 import { getCookiesData, removeCookiesData, setCookiesData } from "../../utils/handleCookies";
 
 const {token, name, role} = getCookiesData()
@@ -37,6 +37,11 @@ const userValidation = (state = initialState, action) => {
         token: "",
         name: "",
         error: "",
+      }
+    case SET_OTP:
+      return{
+        ...state,
+        otp: action.payload
       }
 
     default:

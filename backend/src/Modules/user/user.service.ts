@@ -1,6 +1,6 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -10,9 +10,6 @@ import { AuthService } from '../../auth/auth.service';
 import { OrganizationService } from 'src/Modules/organization/organization.service';
 import { PhotoService } from '../photo/photo.service';
 import { DepartmentService } from '../department/department.service';
-import { Organization } from '../organization/entities/organization.entity';
-import { Role } from '../role/entities/role.entity';
-import { Photo } from '../photo/entities/photo.entity';
 const otpGenerator = require('otp-generator')
 const sgMail = require('@sendgrid/mail')
 
@@ -218,7 +215,7 @@ export class UserService {
     await this.sendMail(msg)
     await this.repo.save(user)
 
-    return otp;
+    return {otp};
   }
 
   async verifyOtp(email: string, otp: string, newPassword: string) {

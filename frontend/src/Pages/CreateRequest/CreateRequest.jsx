@@ -11,7 +11,7 @@ import Select from "../../Components/Shared/Select/Select"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { requestTypeOptions } from "../../Constant/dummyData";
+import { requestTypeOptions } from "../../Constant/tablesData";
 import { useDispatch, useSelector } from "react-redux";
 import { getItems } from "../../Redux/item/itemAction";
 import { createRequest } from "../../Redux/request/requestAction";
@@ -73,7 +73,7 @@ const CreateRequest = () => {
         </Button>
       </Box>
       <Divider sx={dividerStyles} />
-      <Alert severity="error">{error}</Alert>
+      {error && <Alert severity="error">{error}</Alert>}
       <Box component="form" onSubmit={handleSubmit} id="request-form">
       <Select
             label={"Request Type"}

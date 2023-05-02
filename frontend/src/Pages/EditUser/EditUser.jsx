@@ -1,17 +1,13 @@
 import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import Input from "../../Components/Shared/Input/Input";
-import Select from "../../Components/Shared/Select/Select";
-import { departments } from "../../Constant/dummyData";
 import "./editUser.css";
 import { useDispatch, useSelector } from "react-redux"
-import { getOrganizations } from "../../Redux/organization/organizationAction"
 import { useNavigate, useParams } from "react-router-dom"
 import { editUser, getUserDetails } from "../../Redux/user/userAction";
 import { imageTextStyles, imageUploadStyles, registerCancelButton, registerHeaderStyles, registerMainStyles, registerSaveButton } from "./styles";
 import PhotoUpload from "../../Components/Shared/PhotoUpload/PhotoUpload";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { getDepartments } from "../../Redux/department/departmentAction";
 
 
 const EditUser = ({ user }) => {

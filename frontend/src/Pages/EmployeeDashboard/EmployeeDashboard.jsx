@@ -17,7 +17,7 @@ import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutl
 import {
   ownComplaintLabel,
   ownRequestLabel,
-} from "../../Constant/dummyData";
+} from "../../Constant/tablesData";
 import Tables from "../../Components/Shared/Tables/Tables";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";

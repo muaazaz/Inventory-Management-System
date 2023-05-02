@@ -1,4 +1,4 @@
-import { CREATE_USER, DELETE_USER, EDIT_USER, GET_USERS, GET_USERS_COUNT, GET_USER_DETAILS, LOG_IN, LOG_OUT, SEARCH_USERS, SELECT_USER_ORGANIZATION } from "../../Constant/reducerConstants"
+import { CREATE_USER, DELETE_USER, EDIT_USER, GENERATE_OTP, GET_USERS, GET_USERS_COUNT, GET_USER_DETAILS, LOG_IN, LOG_OUT, SEARCH_USERS, SELECT_USER_ORGANIZATION, UPDATE_PASSWORD } from "../../Constant/reducerConstants"
 
 export const createUser  = (data) =>{
     return({
@@ -64,5 +64,19 @@ export const selectUserOrganization = (data)=>{
 export const getUserCount = ()=>{
     return({
         type: GET_USERS_COUNT
+    })
+}
+
+export const generateOtp = (data)=>{
+    return({
+        type: GENERATE_OTP,
+        data
+    })
+}
+
+export const updatePassword = (data)=>{
+    return({
+        type: UPDATE_PASSWORD,
+        data
     })
 }

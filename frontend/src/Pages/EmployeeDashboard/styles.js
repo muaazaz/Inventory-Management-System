@@ -10,11 +10,13 @@ const mainDiv = {
   infoDiv = {
     display: "flex",
     flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "center",
     margin: "1%",
   },
   imgDiv = {
     display: "flex",
-    width: "10%",
+    width: {md: "10%", xs: "30%"},
     justifyContent: "center",
     alignItems: "center",
   },
@@ -27,7 +29,7 @@ const mainDiv = {
   },
   img = {
     boxShadow: "0 1px 5px 1px gray",
-    width: "80%",
+    width: {md: "80%", xs: "100%"},
     height: "80%",
   },
   editButton = {

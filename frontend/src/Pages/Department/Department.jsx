@@ -10,7 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import { addButton, divider, headerDiv, headerText, main, searchStyles } from "./styles";
 import Tables from "../../Components/Shared/Tables/Tables";
-import { departmentLabel } from "../../Constant/dummyData";
+import { departmentLabel } from "../../Constant/tablesData";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

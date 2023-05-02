@@ -14,7 +14,7 @@ import {
   adminEmpComplaintLabel,
   ownComplaintLabel,
   complaintStatusOptions,
-} from "../../Constant/dummyData";
+} from "../../Constant/tablesData";
 import {
   addButton,
   complaintSearchStyles,
@@ -64,6 +64,8 @@ const AdminComplaint = () => {
         break;
       case 2:
         dispatch(getComplaints('own'))
+        break;
+      default:
         break;
     }
     setSearch("")

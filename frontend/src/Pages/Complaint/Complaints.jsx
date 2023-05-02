@@ -6,7 +6,7 @@ import {
   complaintLabel,
   ownComplaintLabel,
   complaintStatusOptions,
-} from "../../Constant/dummyData";
+} from "../../Constant/tablesData";
 import {
   addButton,
   complaintSearchStyles,

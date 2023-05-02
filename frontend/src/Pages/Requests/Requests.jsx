@@ -6,7 +6,7 @@ import {
   ownRequestLabel,
   requestsLabel,
   requestStatusOptions,
-} from "../../Constant/dummyData";
+} from "../../Constant/tablesData";
 import { headerDiv, headerText, main, addButton, searchStyles } from "./styles";
 import { useEffect, useState } from "react";
 import Select from "../../Components/Shared/Select/Select";

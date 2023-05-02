@@ -136,13 +136,16 @@ export class ComplaintsService {
     const roleId = user.role === 'superadmin' ? 2 : 3
     const where = user.role === 'superadmin' ? 'user.role = ' + roleId : 'user.role=' + roleId + ' AND user.organization = ' + user.organizationId
 
-    const monthlyCount = await this.repo.createQueryBuilder('complaint')
-      .select("status, TO_CHAR(TO_DATE(EXTRACT(Month from complaint.created_at)::text, 'MM'), 'Mon') AS month, EXTRACT(Month from complaint.created_at) AS monthNo, COUNT(*), status")
-      .innerJoin(User, "user", "user.id = complaint.userId")
-      .where(where)
-      .groupBy('month, monthNo, status')
-      .orderBy('monthNo', 'ASC')
-      .getRawMany()
+    const monthlyCount = await this.repo
+      .createQueryBuilder('complaint')
+      .select("TO_CHAR(TO_DATE(EXTRACT(Month from complaint.created_at)::text, 'MM'), 'Mon') AS month, EXTRACT(Month from complaint.created_at) AS monthNo")
+      .addSelect(`COUNT(CASE WHEN complaint.status = 'Pending' THEN 1 ELSE NULL END)`, 'Pending')
+      .addSelect(`COUNT(CASE WHEN complaint.status = 'Resolved' THEN 1 ELSE NULL END)`, 'Resolved')
+      .innerJoin(User, 'user', 'user.id = complaint.userId')   
+      .where(where) 
+      .groupBy('month, monthNo')
+      .orderBy(`monthNo`, 'ASC')
+      .getRawMany();
 
     const currentMonthCount = await this.repo.createQueryBuilder('complaint')
       .select("status, count(*)")

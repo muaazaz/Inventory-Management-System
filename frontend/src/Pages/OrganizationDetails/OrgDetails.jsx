@@ -4,7 +4,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { orgMainStyles, orgViewButton, orgViewHeader } from "./styles";
 import ViewImage from "../../Components/Shared/ViewImage/ViewImage";
 import ViewContent from "../../Components/Shared/ViewContent/ViewContent";
-import { adminsLabel } from "../../Constant/dummyData";
+import { adminsLabel } from "../../Constant/tablesData";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import Tables from "../../Components/Shared/Tables/Tables";

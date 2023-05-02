@@ -5,7 +5,7 @@ import {
   returnsLabel,
   returnTypeOptions,
   returnStatusOptions,
-} from "../../Constant/dummyData";
+} from "../../Constant/tablesData";
 import { complaintSearchStyles, headerDiv, headerText, main } from "./styles";
 import { useEffect, useState } from "react";
 import Select from "../../Components/Shared/Select/Select";

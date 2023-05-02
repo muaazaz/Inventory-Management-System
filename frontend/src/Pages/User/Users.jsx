@@ -1,5 +1,5 @@
 import Tables from "../../Components/Shared/Tables/Tables";
-import { adminsLabel, employeesLabel } from "../../Constant/dummyData";
+import { adminsLabel, employeesLabel } from "../../Constant/tablesData";
 import { Box, Button, IconButton, InputBase, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";

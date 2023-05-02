@@ -1,5 +1,5 @@
 import { takeEvery, put } from 'redux-saga/effects'
-import { CREATE_USER, DELETE_USER, EDIT_USER, GET_USERS, GET_USERS_COUNT, GET_USER_DETAILS, LOG_IN, SEARCH_USERS, SELECT_USER_ORGANIZATION, SET_CREATED_USER, SET_ERROR, SET_SEARCHED_USERS, SET_USER, SET_USERS, SET_USERS_COUNT, SET_USER_DETAILS, USER_ERROR } from '../../Constant/reducerConstants'
+import { CREATE_USER, DELETE_USER, EDIT_USER, GENERATE_OTP, GET_USERS, GET_USERS_COUNT, GET_USER_DETAILS, LOG_IN, SEARCH_USERS, SELECT_USER_ORGANIZATION, SET_CREATED_USER, SET_ERROR, SET_OTP, SET_SEARCHED_USERS, SET_USER, SET_USERS, SET_USERS_COUNT, SET_USER_DETAILS, UPDATE_PASSWORD, USER_ERROR } from '../../Constant/reducerConstants'
 import { fetchRequest } from '../../utils/fetchRequest'
 
 function* createUser({ data }) {
@@ -40,7 +40,18 @@ function* searchUser ({search, select}){
 }
 function* getUserCount(){
     const res = yield fetchRequest("/user/count","GET")
-    yield put({type: SET_USERS_COUNT, payload:res})
+    yield put({type: SET_USERS_COUNT, payload: res})
+}
+function* generateOtp({data}){
+    const res = yield fetchRequest("/user/otp", "POST", data)
+    if(res.error){
+        yield put({SET_ERROR, payload: res.message})
+    }else{
+        yield put({type: SET_OTP, payload: res.otp})
+    }
+}
+function* updatePassword({data}){
+    const res = yield fetchRequest("/user/password", "PATCH", data)
 }
 export default function* userSaga() {
     yield takeEvery(LOG_IN, logIn)
@@ -51,4 +62,6 @@ export default function* userSaga() {
     yield takeEvery(DELETE_USER, deleteUser)
     yield takeEvery(GET_USERS_COUNT, getUserCount )
     yield takeEvery([SEARCH_USERS, SELECT_USER_ORGANIZATION], searchUser)
+    yield takeEvery(GENERATE_OTP, generateOtp)
+    yield takeEvery(UPDATE_PASSWORD, updatePassword)
 }

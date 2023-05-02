@@ -84,21 +84,23 @@ export class ItemsService {
   }
 
   async getCount(user: any) {
-    const where = 'category1.organization = ' + user.organizationId
+    const where = 'category.organization = ' + user.organizationId
 
     const monthlyCount = await this.repo.createQueryBuilder('item')
-      .select("COUNT(*) AS count, category2.name As category, item.assigned_to, TO_CHAR(TO_DATE(EXTRACT(MONTH FROM item.created_at ):: text, 'MM'),'Mon')AS month, EXTRACT(Month from item.created_at) AS monthNo")
-      .innerJoin(Category, "category1", "category1.id = item.categoryId")
-      .innerJoin(Category, "category2", "category2.id = category1.parentId")
-      .where(where)
-      .groupBy('item.assigned_to, category, month, monthNo')
-      .orderBy('monthNo', 'ASC')
-      .getRawMany()
+    .select("category.name As category")
+    .addSelect(`COUNT(CASE WHEN item.assigned_to is not null THEN 1 ELSE NULL END)`, 'Assigned')
+    .addSelect(`COUNT(CASE WHEN item.assigned_to is null THEN 1 ELSE NULL END)`, 'Unassigned')
+    .innerJoin("item.category", "subCategory")
+    .innerJoin("subCategory.parent", "category") 
+    .where(where) 
+    .groupBy('category.name')
+    .orderBy('COUNT(item.assigned_to)', 'ASC')
+    .getRawMany();
 
     const currentMonthCount = await this.repo.createQueryBuilder('item')
       .select("COUNT(*) AS count")
-      .innerJoin(Category, "category1", "category1.id = item.categoryId")
-      .innerJoin(Category, "category2", "category2.id = category1.parentId")
+      .innerJoin(Category, "subCategory", "subCategory.id = item.categoryId")
+      .innerJoin(Category, "category", "category.id = subCategory.parentId")
       .where('EXTRACT(MONTH FROM item.created_at) = EXTRACT(MONTH FROM now())')
       .andWhere(where)
       .getRawOne()

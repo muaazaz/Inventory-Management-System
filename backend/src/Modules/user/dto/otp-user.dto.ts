@@ -5,10 +5,8 @@ export class OtpDto{
     email: string
 
     @IsOptional()
-    @IsString()
     otp: string
 
     @IsOptional()
-    @IsString()
     newPassword: string
 }

@@ -14,7 +14,6 @@ import { Role } from 'src/enums/role.enum';
 import { Serialize } from 'src/decorators/serialize.decorator';
 import { UsersDto } from './dto/users.dto';
 import { UserDetailDto } from './dto/user.details.dto';
-import { AllItemsDto } from '../item/dto/all-items.dto';
 
 @Controller('user')
 export class UserController {

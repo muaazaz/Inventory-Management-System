@@ -7,7 +7,7 @@ const mainDiv = {
 contentDiv = {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-evenly",
+    justifyContent: "space-around",
     alignItems: "center",
     width: {md: "50%", xs: "100%"},
     minHeight: "400px",
