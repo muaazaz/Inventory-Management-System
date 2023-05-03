@@ -53,11 +53,12 @@ const Complaints = () => {
                 <InputBase
                   sx={{ textAlign: "center", m: 1 }}
                   placeholder="Search something..."
+                  value={search}
                   onChange={(e) => {
                     setSearch(e.target.value);
                     setStatusSelect("");
                     setOrgSelect("");
-                    dispatch(searchComplaint(e.target.value));
+                    dispatch(searchComplaint({search: e.target.value}));
                   }}
                 />
                 <IconButton
@@ -97,7 +98,7 @@ const Complaints = () => {
                     setStatusSelect(e.target.value);
                     setOrgSelect("");
                     setSearch("");
-                    dispatch(selectComplaintStatus(e.target.value));
+                    dispatch(selectComplaintStatus({select: e.target.value}));
                   }}
                 />
               </>

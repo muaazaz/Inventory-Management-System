@@ -16,6 +16,7 @@ import { getUserCount } from "../../Redux/user/userAction";
 import { getItemCount } from "../../Redux/item/itemAction";
 import { getVendorsCount } from "../../Redux/vendor/vendorAction";
 import { getCategoryCount } from "../../Redux/category/categoryAction";
+import { mapData } from "../../utils/mapChartData";
 
 const AdminDashboard = () => {
   const dispatch = useDispatch(),
@@ -88,23 +89,29 @@ const AdminDashboard = () => {
         }}
       >
         <Box sx={{ width: "50%" }}>
-          <BarChart 
-            dualLineChart 
-            data={itemData.monthlyCount ? itemData.monthlyCount : []}
-            defaultOpt={"category"}
-            opt1={"Unassigned"}
-            opt2={"Assigned"}
-            label={[["Category", "Unassigned", "Assigned"]]}
+          <BarChart
+            dualLineChart
+            data={mapData({
+              data: itemData?.monthlyCount,
+              defaultOpt: "category",
+              opt1: "Unassigned",
+              opt2: "Assigned",
+              label: [["Category", "Unassigned", "Assigned"]],
+              dualLineChart: true
+            })}
           />
         </Box>
         <Box sx={{ width: "50%" }}>
           <BarChart
             dualLineChart
-            data={complaintData.monthlyCount ? complaintData.monthlyCount : []}
-            defaultOpt={"month"}
-            opt1={"Pending"}
-            opt2={"Resolved"}
-            label={[["Month", "Pending", "Resolved"]]}
+            data={mapData({
+              data: complaintData?.monthlyCount,
+              defaultOpt: "month",
+              opt1: "Pending",
+              opt2: "Resolved",
+              label: [["Month", "Pending", "Resolved"]],
+              dualLineChart: true
+            })}
           />
         </Box>
       </Box>

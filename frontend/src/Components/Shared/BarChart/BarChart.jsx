@@ -1,24 +1,22 @@
 import { Chart } from "react-google-charts";
-import "./barChart.css"
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { mainDiv } from "./styles";
+import "./barChart.css";
+import { useEffect, useState } from "react";
 
 const BarChart = (props) => {
-  let data = []
-  let colors = props.dualLineChart ? ["#007FFF", "#00A572"] : []
+  let colors = props.dualLineChart ? ["#007FFF", "#00A572"] : ["#007FFF"];
+  const [loading, setLoading] = useState(true);
 
-  if(props.dualLineChart){
-    props.data?.forEach((obj) => {
-      data.push([obj[props.defaultOpt], obj[props.opt1], obj[props.opt2]])
-    })
-    data = props.label?.concat(data)
-  }else{
-    props.data?.forEach((obj) => {
-      data.push([obj.month, obj.count])
-    })
-    data = props.label?.concat(data)
+  const callLoading = () =>{
+    setTimeout(()=>{
+      setLoading(false)
+    },2000)
   }
-  
+
+  useEffect(() => {
+    callLoading()
+  }, []);
 
   const options = {
     chart:{
@@ -27,20 +25,16 @@ const BarChart = (props) => {
     colors,
     width: "100%",
     height: 500,
-    bar: {groupWidth: "20%"},
-    vAxis: {
-      maxValue: 0,
-    },
-  }
+    bar: {groupWidth: "20%"}
+  };
 
   return (
     <Box sx={mainDiv}>
-      <Chart
-        data={data}
-        options={options}
-        chartType="Bar"
-        legendToggle
-      />
+      {loading ? (
+        <CircularProgress sx={{margin: "auto"}}/>
+      ) : (
+        <Chart data={props.data} options={options} chartType="Bar" legendToggle />
+      )}
     </Box>
   );
 };

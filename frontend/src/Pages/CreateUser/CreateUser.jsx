@@ -32,6 +32,7 @@ const CreateUser = ({ user }) => {
       departmentId: "",
     }),
     [error, setError] = useState(""),
+    [once, setOnce] = useState(false),
     navigate = useNavigate(),
     dispatch = useDispatch(),
     { orgData, userData, userValidation, departmentData } = useSelector(
@@ -39,15 +40,19 @@ const CreateUser = ({ user }) => {
     );
 
   useEffect(() => {
-    userValidation.role === "superadmin"
+    if(!once){
+      userValidation.role === "superadmin"
       ? dispatch(getOrganizations())
       : dispatch(getDepartments());
+      setOnce(true)
+    }
+
     if (userData.error) {
       setError(userData.error);
     } else {
       setError("");
     }
-  }, [dispatch]);
+  }, [userData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
