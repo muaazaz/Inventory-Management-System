@@ -170,9 +170,14 @@ export class ComplaintsService {
       .groupBy('status')
       .getRawMany()
 
-    const totalPendingCount = await this.repo.count({ relations: { user: { role: true } }, where: { user: { role: { id: roleId } }, status: "Pending" } })
-    const totalResolvedCount = await this.repo.count({ relations: { user: { role: true } }, where: { user: { role: { id: roleId } }, status: "Resolved" } })
+    const totalCount = await this.repo.createQueryBuilder('complaint')
+    .select("COUNT(*) as count, status")
+    .innerJoin(User, "user", "user.id = complaint.userId")
+    .where(where)
+    .groupBy('status')
+    .getRawMany()
 
-    return { monthlyCount, currentMonthCount, totalPendingCount, totalResolvedCount }
+
+    return { monthlyCount, currentMonthCount, totalCount }
   }
 }
