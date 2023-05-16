@@ -19,7 +19,15 @@ export class DepartmentService {
     return this.repo.save(department);
   }
 
-  findAll(loggedInUser: any) {
+  findAll(search:string, loggedInUser: any) {
+    if(search){
+      return this.repo.createQueryBuilder('department')
+      .leftJoinAndSelect('department.organization', 'organization')
+      .where("LOWER(department.name) LIKE :search", { search: `%${search.toLowerCase()}%` })
+      .orWhere("LOWER(department.email) LIKE :search", { search: `%${search.toLowerCase()}%` })
+      .andWhere("department.organization = :organization_id", { organization_id: loggedInUser.organizationId })
+      .getMany()
+    }
     return this.repo.find({
       relations: ['organization'], where: { organization: { id: loggedInUser.organizationId } },
       order: {
@@ -34,22 +42,11 @@ export class DepartmentService {
 
   async update(id: number, updateDepartmentDto: UpdateDepartmentDto) {
     const department = await this.repo.findOneBy({ id })
-    Object.assign(department, updateDepartmentDto)
-    return this.repo.save(department);
+    return this.repo.save({...department, updateDepartmentDto});
   }
 
   remove(id: number) {
     return this.repo.delete({ id });
-  }
-  async findBySearch(search: string, user: any) {
-    const complaints = await this.repo.createQueryBuilder('department')
-      .leftJoinAndSelect('department.organization', 'organization')
-      .where("LOWER(department.name) LIKE :search", { search: `%${search.toLowerCase()}%` })
-      .orWhere("LOWER(department.email) LIKE :search", { search: `%${search.toLowerCase()}%` })
-      .andWhere("department.organization = :organization_id", { organization_id: user.organizationId })
-      .getMany()
-
-    return complaints
   }
 
 }

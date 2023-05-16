@@ -46,7 +46,7 @@ function* deleteRequest({ id }) {
 
 function* searchRequest({ search, selectStatus, selectType, requestType }) {
   const res = yield fetchRequest(
-    `/request/findby?search=${search ? search : ``}&selectStatus=${
+    `/request?search=${search ? search : ``}&selectStatus=${
       selectStatus ? selectStatus : ``
     }&selectType=${selectType ? selectType : ""}&type=${requestType}`,
     "GET"

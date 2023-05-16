@@ -29,16 +29,9 @@ export class VendorsController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(AllVendorsDto)
-  @Get('findby')
-  findBy(@Query() query: any, @UserDecorator() user:any){
-    return this.vendorsService.findBySearch(query.search, query.catSelect, query.subCatSelect, user)
-  }
-
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Serialize(AllVendorsDto)
   @Get()
-  findAll(@UserDecorator() user: any) {
-    return this.vendorsService.findAll(user);
+  findAll(@Query() query: any, @UserDecorator() user: any) {
+    return this.vendorsService.findAll(query, user);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

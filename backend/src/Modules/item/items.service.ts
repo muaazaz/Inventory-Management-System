@@ -15,47 +15,70 @@ import { VendorsService } from '../vendor/vendors.service';
 export class ItemsService {
   constructor(@InjectRepository(Item)
   private repo: Repository<Item>,
-    @Inject(forwardRef(()=>CategoryService))
+    @Inject(forwardRef(() => CategoryService))
     private categoryService: CategoryService,
     private userService: UserService,
     private vendorService: VendorsService
   ) { }
 
-  async create(createItemDto: CreateItemDto) {
+  async create(createItemDto: CreateItemDto, loggedInUser: any) {
     const category = await this.categoryService.findOne(createItemDto.subCategoryId)
     const vendor = await this.vendorService.findOne(createItemDto.vendorId)
     const item = this.repo.create(createItemDto)
     item.category = category
     item.vendor = vendor
-
+    await this.categoryService.setCategoriesCount(loggedInUser)
     return this.repo.save(item);
   }
 
-  findAll(user: any, type: string) {
-    switch (type) {
-      case "Acquire":
-        return this.repo.find({
-          relations: ['category', 'category.parent', 'category.organization'],
-          where: { category: { organization: { id: user.organizationId } }, assigned_to: IsNull() },
-          order: {
-            id: "ASC"
-          }
-        });
-      case "Faulty":
-        return this.repo.find({
-          relations: ['category', 'category.parent', 'category.organization'],
-          where: { assigned_to: { id: user.id } },
-          order: {
-            id: "ASC"
-          }
-        });
-      default:
-        return this.repo.find({
-          relations: ['category', 'category.parent', 'category.organization'], where: { category: { organization: { id: user.organizationId } } },
-          order: {
-            id: "ASC"
-          }
-        });
+  async findAll(user: any, filters: any) {
+    const where =
+      filters.type === "Acquire" ?
+        { category: { organization: { id: user.organizationId } }, assigned_to: IsNull() }
+        :
+        filters.type === "Faulty" ?
+          { assigned_to: { id: user.id } }
+          :
+          { category: { organization: { id: user.organizationId } } }
+
+    if (!filters.search && !filters.selectCategory && !filters.selectSubCategory) {
+      return this.repo.find({
+        relations: ['category', 'category.parent', 'category.organization'],
+        where: where,
+        order: {
+          id: "ASC"
+        }
+      });
+    } else {
+      const items = filters.search ? await this.repo.createQueryBuilder('item')
+        .leftJoinAndSelect('item.category', 'category')
+        .leftJoinAndSelect('category.organization', 'organization')
+        .leftJoinAndSelect('category.parent', 'parent')
+        .where("LOWER(item.name) LIKE :search AND category.organizationId = :organization", { search: `%${filters.search.toLowerCase()}%`, organization: user.organizationId })
+        .orWhere("LOWER(organization.name) LIKE :search AND category.organizationId = :organization", { search: `%${filters.search.toLowerCase()}%`, organization: user.organizationId })
+        .orWhere("LOWER(parent.name) LIKE :search AND category.organizationId = :organization", { search: `%${filters.search.toLowerCase()}%`, organization: user.organizationId })
+        .orWhere("LOWER(category.name) LIKE :search AND category.organizationId = :organization", { search: `%${filters.search.toLowerCase()}%`, organization: user.organizationId })
+        .orderBy("item.id", "ASC")
+        .getMany()
+        :
+        !filters.selectSubCategory ?
+          await this.repo.find({
+            relations: ['category', 'category.organization', 'category.parent'],
+            where: { category: { parent: { name: filters.selectCategory }, organization: { id: user.organizationId } } },
+            order: {
+              id: "ASC"
+            }
+          })
+          :
+          await this.repo.find({
+            relations: ['category', 'category.organization', 'category.parent'],
+            where: { category: { name: filters.selectSubCategory, organization: { id: user.organizationId } } },
+            order: {
+              id: "ASC"
+            }
+          })
+
+      return items
     }
   }
 
@@ -78,24 +101,27 @@ export class ItemsService {
     return this.repo.save(item);
   }
 
-  async remove(id: number) {
+  async remove(id: number, loggedInUser: any) {
     const item = await this.repo.findOne({ where: { id } })
-    return this.repo.remove(item);
+    await this.repo.remove(item);
+    await this.categoryService.setCategoriesCount(loggedInUser)
+    return
   }
 
   async getCount(user: any) {
+    let totalCount = 0
     const where = 'category.organization = ' + user.organizationId
 
     const monthlyCount = await this.repo.createQueryBuilder('item')
-    .select("category.name As category")
-    .addSelect(`COUNT(CASE WHEN item.assigned_to is not null THEN 1 ELSE NULL END)`, 'Assigned')
-    .addSelect(`COUNT(CASE WHEN item.assigned_to is null THEN 1 ELSE NULL END)`, 'Unassigned')
-    .innerJoin("item.category", "subCategory")
-    .innerJoin("subCategory.parent", "category") 
-    .where(where) 
-    .groupBy('category.name')
-    .orderBy('COUNT(item.assigned_to)', 'ASC')
-    .getRawMany();
+      .select("category.name As category")
+      .addSelect(`COUNT(CASE WHEN item.assigned_to is not null THEN 1 ELSE NULL END)`, 'Assigned')
+      .addSelect(`COUNT(CASE WHEN item.assigned_to is null THEN 1 ELSE NULL END)`, 'Unassigned')
+      .innerJoin("item.category", "subCategory")
+      .innerJoin("subCategory.parent", "category")
+      .where(where)
+      .groupBy('category.name')
+      .orderBy('COUNT(item.assigned_to)', 'ASC')
+      .getRawMany();
 
     const currentMonthCount = await this.repo.createQueryBuilder('item')
       .select("COUNT(*) AS count")
@@ -105,58 +131,19 @@ export class ItemsService {
       .andWhere(where)
       .getRawOne()
 
-    const totalCount = await this.repo.count({ relations: ['category', 'category.organization'], where: { category: { organization: { id: user.organizationId } } } })
+    monthlyCount.forEach((element) => {
+      totalCount += +element.Assigned + +element.Unassigned
+    })
 
     return { monthlyCount, currentMonthCount, totalCount }
   }
 
-  async findBySearch(search: string, selectCategory: string, selectSubCategory: string, user: any) {
-    if (!search && !selectCategory && !selectSubCategory) {
-      return this.repo.find({
-        relations: ['category', 'category.parent', 'category.organization'],
-        where: { category: { organization: { id: user.organizationId } } },
-        order: {
-          id: "ASC"
-        }
-      });
-    } else {
-      const items = search ? await this.repo.createQueryBuilder('item')
-        .leftJoinAndSelect('item.category', 'category')
-        .leftJoinAndSelect('category.organization', 'organization')
-        .leftJoinAndSelect('category.parent', 'parent')
-        .where("LOWER(item.name) LIKE :search AND category.organizationId = :organization", { search: `%${search.toLowerCase()}%`, organization: user.organizationId })
-        .orWhere("LOWER(organization.name) LIKE :search AND category.organizationId = :organization", { search: `%${search.toLowerCase()}%`, organization: user.organizationId })
-        .orWhere("LOWER(parent.name) LIKE :search AND category.organizationId = :organization", { search: `%${search.toLowerCase()}%`, organization: user.organizationId })
-        .orWhere("LOWER(category.name) LIKE :search AND category.organizationId = :organization", { search: `%${search.toLowerCase()}%`, organization: user.organizationId })
-        .orderBy("item.id", "ASC")
-        .getMany()
-        :
-        !selectSubCategory ?
-          await this.repo.find({
-            relations: ['category', 'category.organization', 'category.parent'],
-            where: { category: { parent: { name: selectCategory }, organization: { id: user.organizationId } } },
-            order: {
-              id: "ASC"
-            }
-          })
-          :
-          await this.repo.find({
-            relations: ['category', 'category.organization', 'category.parent'],
-            where: { category: { name: selectSubCategory, organization: { id: user.organizationId } } },
-            order: {
-              id: "ASC"
-            }
-          })
-
-      return items
-    }
-  }
-
+  //helper function
   async setItemQuantityCount(subCategory: any) {
     const quantity = await this.repo.count({ relations: ['category'], where: { category: { id: subCategory.id } } })
     const quantityAssigned = await this.repo.count({ relations: ['category'], where: { category: { id: subCategory.id }, assigned_to: Not(IsNull()) } })
     const quantityUnassigned = await this.repo.count({ relations: ['category'], where: { category: { id: subCategory.id }, assigned_to: IsNull() } })
-    const quantityFaulty = await this.repo.count({relations: ['category'], where:{category:{id: subCategory.id}, faulty: true}})
+    const quantityFaulty = await this.repo.count({ relations: ['category'], where: { category: { id: subCategory.id }, faulty: true } })
 
     subCategory.quantity = quantity
     subCategory.quantityAssigned = quantityAssigned

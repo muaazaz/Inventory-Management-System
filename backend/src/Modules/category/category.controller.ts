@@ -37,21 +37,12 @@ export class CategoryController {
     return this.categoryService.findSelectOptions(user);
   }
 
-
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Serialize(AllCategoryDto)
-  @Roles(Role.Admin, Role.Employee)
-  @Get("findBy")
-  findBySearch(@Query() query: any, @UserDecorator() user: any) {
-    return this.categoryService.findBySearch(query.search, user);
-  }
-
   @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(AllCategoryDto)
   @Roles(Role.Admin, Role.Employee)
   @Get()
-  findAll(@UserDecorator() user: any) {
-    return this.categoryService.findAll(user);
+  findAll(@Query() query: any, @UserDecorator() user: any) {
+    return this.categoryService.findAll(query.search, user);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
@@ -70,7 +61,7 @@ export class CategoryController {
 
   @Roles(Role.Admin)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(+id);
+  remove(@Param('id') id: string, @UserDecorator() user: any) {
+    return this.categoryService.remove(+id,user);
   }
 }

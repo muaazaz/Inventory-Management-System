@@ -23,16 +23,9 @@ export class DepartmentController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(AllDepartmentsDto)
-  @Get('findby')
-  findBy(@Query() query: any, @UserDecorator() user:any){
-    return this.departmentService.findBySearch(query.search, user)
-  }
-
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Serialize(AllDepartmentsDto)
   @Get()
-  findAll(@UserDecorator() user: any) {
-    return this.departmentService.findAll(user);
+  findAll(@UserDecorator() user: any, @Query() query:any) {
+    return this.departmentService.findAll(query.search, user);
   }
 
   @Get(':id')

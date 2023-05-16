@@ -47,6 +47,9 @@ export class Category {
     @ManyToOne(()=>Organization, (organization)=>organization.category)
     organization: Organization
 
+    @Column()
+    organizationId: number
+
     @ManyToMany(()=>Vendor, (vendor)=>vendor.categories)
     vendors: Vendor
 }

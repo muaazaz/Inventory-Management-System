@@ -26,7 +26,7 @@ function*deleteDepartment({id}){
     yield fetchRequest("/department/"+id, "DELETE")
 }
 function* searchDepartment ({search, select}){
-    const res = yield fetchRequest(`/department/findby?search=${search? search : ``}`, "GET")
+    const res = yield fetchRequest(`/department?search=${search? search : ``}`, "GET")
     yield put({type: SET_DEPARTMENT_SEARCH, payload:{departments: res}})
  }
 

@@ -24,16 +24,9 @@ export class RequestController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(AllRequestsDto)
-  @Get('findby')
-  findBySearch(@Query() query: any, @UserDecorator() user: any){
-    return this.requestService.findBySearch(query.search, query.selectType, query.selectStatus, query.type, user)
-  }
-
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Serialize(AllRequestsDto)
   @Get()
   findAll(@Query() query: any, @UserDecorator() user: any) {
-    return this.requestService.findAll(query.type, user);
+    return this.requestService.findAll(query, user);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

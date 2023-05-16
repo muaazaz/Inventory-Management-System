@@ -24,10 +24,6 @@ export class AuthService {
         const validPass = await bcrypt.compare(password, user.password)    
         if(!validPass) throw new BadRequestException('Password incorrect')
 
-        if(user.created_at.toString() === user.update_at.toString()){
-            return {Message: "New user detected please set your account's password!", userId: user.id}
-        }
-
         const token =   await this.genToken(user, user.role.role)
 
         return {user, token}

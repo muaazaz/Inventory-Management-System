@@ -20,7 +20,6 @@ import {
 
 function* createItem({ formData }) {
   const { item, error, message } = yield fetchRequest("/items", "POST", formData);
-  console.log(message)
   if (error) {
     put({ type: SET_CREATE_ITEM_ERROR, payload: { error: message } });
   } else {
@@ -48,7 +47,7 @@ function* getItemsCount() {
 }
 function* searchItem({ search, selectCategory, selectSubCategory }) {
   const res = yield fetchRequest(
-    `/items/findby?search=${search ? search : ``}&selectCategory=${
+    `/items?search=${search ? search : ``}&selectCategory=${
       selectCategory ? selectCategory : ``
     }&selectSubCategory=${selectSubCategory ? selectSubCategory : ``}`,
     "GET"

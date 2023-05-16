@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CategoryService } from '../category/category.service';
 import { Category } from '../category/entities/category.entity';
-import { UserService } from '../user/user.service';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
 import { Vendor } from './entities/vendor.entity';
@@ -13,8 +12,7 @@ export class VendorsService {
   constructor(
     @InjectRepository(Vendor) private repo: Repository<Vendor>,
     private categoryService: CategoryService,
-    private userService: UserService,
-  ) {}
+  ) { }
 
   async create(data: CreateVendorDto) {
     const categories: Category[] = [];
@@ -28,24 +26,53 @@ export class VendorsService {
     return this.repo.save(vendor);
   }
 
-  async findAll(logInUser: any) {
+  async findAll(filters: any, logInUser: any) {
+    if (!filters.search && !filters.selectCategory && !filters.selectSubCategory) {
       return this.repo.find({
-        relations: ['categories', 'categories.parent.organization'],
-        where: {
-          categories: { organization: { id: logInUser.organizationId } },
-        },
-        order:{
+        relations: ['categories', 'categories.parent', 'categories.organization'],
+        where: { categories: { organization: { id: logInUser.organizationId } } },
+        order: {
           id: "ASC"
         }
-      })
+      });
+    } else {
+      const vendors = filters.search ? await this.repo.createQueryBuilder('vendor')
+        .leftJoinAndSelect('vendor.categories', 'categories')
+        .leftJoinAndSelect('categories.organization', 'organization')
+        .leftJoinAndSelect('categories.parent', 'parent')
+        .where("LOWER(vendor.name) LIKE :search AND categories.organizationId = :id", { search: `%${filters.search.toLowerCase()}%`, id: logInUser.organizationId })
+        .orWhere("LOWER(categories.name) LIKE :search AND categories.organizationId = :id", { search: `%${filters.search.toLowerCase()}%`, id: logInUser.organizationId })
+        .orWhere("LOWER(parent.name) LIKE :search AND categories.organizationId = :id", { search: `%${filters.search.toLowerCase()}%`, id: logInUser.organizationId })
+        .orderBy("vendor.id", "ASC")
+        .getMany()
+        :
+        !filters.selectSubCategory ?
+          await this.repo.find({
+            relations: ['categories', 'categories.organization', 'categories.parent'],
+            where: { categories: { parent: { name: filters.selectCategory }, organization: { id: logInUser.organizationId } } },
+            order: {
+              id: "ASC"
+            }
+          })
+          :
+          await this.repo.find({
+            relations: ['categories', 'categories.organization', 'categories.parent'],
+            where: { categories: { name: filters.selectSubCategory, organization: { id: logInUser.organizationId } } },
+            order: {
+              id: "ASC"
+            }
+          })
+
+      return vendors
+    }
   }
 
   findOne(id: number) {
-    return this.repo.findOne({where: {id}, relations: ['categories', 'categories.parent.organization']});
+    return this.repo.findOne({ where: { id }, relations: ['categories', 'categories.parent.organization'] });
   }
 
   async update(id: number, updateVendorDto: UpdateVendorDto) {
-    const vendor = await this.repo.findOne({where:{id}, relations: ['categories', 'categories.parent.organization']})
+    const vendor = await this.repo.findOne({ where: { id }, relations: ['categories', 'categories.parent.organization'] })
     Object.assign(vendor, updateVendorDto)
     return this.repo.save(vendor);
   }
@@ -56,6 +83,7 @@ export class VendorsService {
   }
 
   async getCount(user: any) {
+
     const totalCount = await this.repo.count({
       relations: ['categories', 'categories.organization'],
       where: { categories: { organization: { id: user.organizationId } } },
@@ -73,46 +101,5 @@ export class VendorsService {
       .getCount();
 
     return { totalCount, currentMonthCount };
-  }
-
-  async findBySearch(search: string, selectCategory: string, selectSubCategory: string, user: any) {
-    if (!search && !selectCategory && !selectSubCategory) {
-      return this.repo.find({
-        relations: ['categories', 'categories.parent', 'categories.organization'],
-        where: { categories: { organization: { id: user.organizationId } } },
-        order: {
-          id: "ASC"
-        }
-      });
-    } else {
-      const vendors = search ? await this.repo.createQueryBuilder('vendor')
-        .leftJoinAndSelect('vendor.categories', 'categories')
-        .leftJoinAndSelect('categories.organization', 'organization')
-        .leftJoinAndSelect('categories.parent', 'parent')
-        .where("LOWER(vendor.name) LIKE :search AND categories.organizationId = :id", { search: `%${search.toLowerCase()}%`, id: user.organizationId })
-        .orWhere("LOWER(categories.name) LIKE :search AND categories.organizationId = :id", { search: `%${search.toLowerCase()}%`, id: user.organizationId })
-        .orWhere("LOWER(parent.name) LIKE :search AND categories.organizationId = :id", { search: `%${search.toLowerCase()}%`, id: user.organizationId })
-        .orderBy("vendor.id", "ASC")
-        .getMany()
-        :
-        !selectSubCategory ?
-          await this.repo.find({
-            relations: ['categories', 'categories.organization', 'categories.parent'],
-            where: { categories: { parent: { name: selectCategory }, organization: { id: user.organizationId } } },
-            order: {
-              id: "ASC"
-            }
-          })
-          :
-          await this.repo.find({
-            relations: ['categories', 'categories.organization', 'categories.parent'],
-            where: { categories: { name: selectSubCategory, organization: { id: user.organizationId } } },
-            order: {
-              id: "ASC"
-            }
-          })
-
-      return vendors
-    }
   }
 }

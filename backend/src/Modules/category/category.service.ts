@@ -6,7 +6,6 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 import { ItemsService } from '../item/items.service';
-import { OrganizationService } from '../organization/organization.service';
 
 @Injectable()
 export class CategoryService {
@@ -19,89 +18,29 @@ export class CategoryService {
   ) { }
 
   async create(data: CreateCategoryDto, loggedInUser: any) {
-    const user = await this.userService.findOne(loggedInUser.id)
-    const category = this.repo.create({ name: data.name, organization: user.organization })
+    const category = this.repo.create({ name: data.name, organizationId: loggedInUser.organizationId })
     await this.repo.save(category)
 
     if (data.subCategories) {
       data.subCategories.forEach(async (subCat) => {
-        const subCategory = this.repo.create({ name: subCat.name, parent: category, organization: user.organization })
+        const subCategory = this.repo.create({ name: subCat.name, parent: category, organizationId: loggedInUser.organizationId })
         await this.repo.save(subCategory)
       })
     }
+    await this.setCategoriesCount(loggedInUser)
     return category;
   }
 
   findSelectOptions(user: any) {
     return this.repo.find({
-      relations: ['parent', 'childern', 'organization'], where: { organization: { id: user.organizationId }, parent: IsNull() },
+      relations: [ 'childern' ], where: { organization: { id: user.organizationId }, parent: IsNull() },
       order: {
         id: "ASC"
       }
     });
   }
 
-  async findAll(user: any) {
-    const categoriesCount = await this.repo.createQueryBuilder('category')
-      .select('COUNT(vendors.id) AS vendors, COUNT(childern.id) AS childs, category.name, category.id')
-      .leftJoin('category.organization', 'organization')
-      .leftJoin('category.childern', 'childern')
-      .leftJoin('childern.vendors', 'vendors')
-      .where('category.parent Is Null AND organization.id = :id', { id: user.organizationId })
-      .groupBy('category.name, category.id')
-      .orderBy('category.id')
-      .execute()
-
-    await this.setSubCategoriesCount()
-
-    for (const count of categoriesCount) {
-      const category = await this.repo.findOneBy({ id: count.id })
-      category.vendorsCount = count.vendors
-      category.subCategoriesCount = count.childs
-      await this.repo.save(category)
-    }
-
-
-    return this.repo.find({
-      relations: ['parent', 'childern', 'organization', 'childern.vendors'], where: { organization: { id: user.organizationId }, parent: IsNull() },
-      order: {
-        id: "ASC",
-        childern: { id: "ASC" }
-      }
-    });
-  }
-
-  findOne(id: number) {
-    return this.repo.findOne({ where: { id }, relations: ['parent', 'vendors', 'childern'] });
-  }
-
-  async update(id: number, updateData: UpdateCategoryDto, loggedInUser: any) {
-    const user = await this.userService.findOne(loggedInUser.id)
-    const category = await this.repo.findOne({ where: { id } })
-
-    if (updateData.subCategories) {
-      for (const subCat of updateData.subCategories) {
-        const subCategory = this.repo.create({ name: subCat.name, parent: category, organization: user.organization })
-        await this.repo.save(subCategory)
-      }
-      return category;
-    }
-
-    Object.assign(category, updateData)
-    return this.repo.save(category)
-  }
-
-  async remove(id: number) {
-    const category = await this.repo.findOne({ where: { id }, relations: { parent: true } })
-    if (category.parent === null) {
-      const categories = await this.repo.find({ relations: { parent: true }, where: [{ id }, { parent: { id } }] })
-      return this.repo.remove(categories);
-    }
-    return this.repo.remove(category)
-
-  }
-
-  async findBySearch(search: string, user: any) {
+  async findAll(search: string, user: any) {
     if (!search) {
       return this.repo.find({
         relations: ['parent', 'childern', 'organization', 'childern.vendors'], where: { organization: { id: user.organizationId }, parent: IsNull() },
@@ -123,25 +62,81 @@ export class CategoryService {
     }
   }
 
+  findOne(id: number) {
+    return this.repo.findOne({ where: { id }, relations: ['parent', 'vendors', 'childern'] });
+  }
+
+  async update(id: number, updateData: UpdateCategoryDto, loggedInUser: any) {
+    const user = await this.userService.findOne(loggedInUser.id)
+    const category = await this.repo.findOne({ where: { id } })
+
+    if (updateData.subCategories) {
+      for (const subCat of updateData.subCategories) {
+        const subCategory = this.repo.create({ name: subCat.name, parent: category, organization: user.organization })
+        await this.repo.save(subCategory)
+      }
+      return category;
+    }
+    Object.assign(category, updateData)
+    let [r1, r2] = await Promise.all([this.repo.save(category), this.setCategoriesCount(loggedInUser)])
+    return r1
+  }
+
+  async remove(id: number, loggedInUser: any) {
+    const category = await this.repo.findOne({ where: { id }, relations: { parent: true } })
+    if (category.parent === null) {
+      const categories = await this.repo.find({ relations: { parent: true }, where: [{ id }, { parent: { id } }] })
+      return this.repo.remove(categories);
+    }
+
+    await this.setCategoriesCount(loggedInUser)
+    return this.repo.remove(category)
+
+  }
+
   async getCount(user: any) {
-    const totalCount = await this.repo.count({ relations: { organization: true }, where: { parent: IsNull(), organization: { id: user.organizationId } } })
+    const date = new Date()
+    let currentMonthCount = 0
+    let totalCount = 0
 
     const monthlyCount = await this.repo.createQueryBuilder('category')
-      .select("TO_CHAR(TO_DATE(EXTRACT(Month from created_at)::text, 'MM'), 'Mon') AS month, EXTRACT(Month from created_at) AS monthNo, count(*)")
+      .select("TO_CHAR(TO_DATE(EXTRACT(Month from created_at)::text, 'MM'), 'Mon') AS month, EXTRACT(Month from created_at) AS month_no, count(*) :: int")
       .where("category.organizationId = :organizationId", { organizationId: user.organizationId })
       .andWhere("category.parent IS NULL")
-      .groupBy('month, monthNo')
-      .orderBy('monthNo')
+      .groupBy('month, month_no')
+      .orderBy('month_no')
       .getRawMany()
-
-    const currentMonthCount = await this.repo.createQueryBuilder('category')
-      .select("COUNT(*) AS count")
-      .where("category.organizationId = :organizationId", { organizationId: user.organizationId })
-      .andWhere("EXTRACT(MONTH from created_at) = EXTRACT(MONTH from now())")
-      .andWhere("category.parent IS NULL")
-      .getRawOne()
+    
+    monthlyCount.forEach((element, i)=>{
+      totalCount += element.count
+      if(+element.month_no === (date.getMonth()+1)){
+        currentMonthCount = element.count;
+      }
+    })
 
     return { monthlyCount, currentMonthCount, totalCount }
+  }
+
+//Function to calculate necessary counts
+  async setCategoriesCount(user: any) {
+    const categoriesCount = await this.repo.createQueryBuilder('category')
+      .select('COUNT(vendors.id) AS vendors, COUNT(childern.id) AS childs, category.name, category.id')
+      .leftJoin('category.organization', 'organization')
+      .leftJoin('category.childern', 'childern')
+      .leftJoin('childern.vendors', 'vendors')
+      .where('category.parent Is Null AND organization.id = :id', { id: user.organizationId })
+      .groupBy('category.name, category.id')
+      .orderBy('category.id')
+      .execute()
+
+    await this.setSubCategoriesCount()
+
+    for (const count of categoriesCount) {
+      const category = await this.repo.findOneBy({ id: count.id })
+      category.vendorsCount = count.vendors
+      category.subCategoriesCount = count.childs
+      await this.repo.save(category)
+    }
   }
 
   async setSubCategoriesCount() {

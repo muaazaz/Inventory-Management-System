@@ -35,7 +35,7 @@ function* deleteUser ({id}){
     yield fetchRequest("/user/"+id, "DELETE")
 }
 function* searchUser ({search, select}){
-   const res = yield fetchRequest(`/user/findby?search=${search? search : ``}&select=${select? select : ``}`, "GET")
+   const res = yield fetchRequest(`/user?search=${search? search : ``}&select=${select? select : ``}`, "GET")
    yield put({type: SET_SEARCHED_USERS, payload:{users: res}})
 }
 function* getUserCount(){

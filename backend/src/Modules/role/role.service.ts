@@ -13,4 +13,9 @@ export class RoleService{
     findOne(role: string){
         return this.repo.findOneBy({role})
     }
+    async getIdByRole(role: string){
+        const searchRole = role === 'superadmin' ? 'admin' : 'employee'
+        const roleObj = await this.repo.findOne({where:{role: searchRole}})
+        return roleObj.id
+    }
 }

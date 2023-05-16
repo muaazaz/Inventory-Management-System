@@ -72,24 +72,36 @@ export class UserService {
 
   }
 
-  async firstLogin(userId: number, newPassword: string) {
-    const user = await this.repo.findOne({ relations: { role: true }, where: { id: userId } })
-    user.password = await this.hashPassword(newPassword)
-
-    const token = await this.authService.genToken(user, user.role.role)
-
-    return { user: await this.repo.save(user), token }
-  }
-
-  async findAll(user: any) {
-    const searchRole = user.role === 'superadmin' ? 'admin' : 'employee'
-    const users = await this.repo.find({
-      relations: ['organization', 'role', 'photo', 'department'], where: { role: { role: searchRole } },
-      order: {
-        id: "ASC"
-      }
-    })
-    return users
+  async findAll( search: string, select: string, user: any) {
+    const searchRole = await this.roleService.getIdByRole(user.role)
+    if (!search && !select) {
+      return this.repo.find({ relations: ['organization', 'department', 'role', 'photo'], where: { role: { id: searchRole } } })
+    } else {
+      const users = search ? await this.repo.createQueryBuilder('user')
+        .leftJoinAndSelect('user.organization', 'organization')
+        .leftJoinAndSelect('user.department', 'department')
+        .leftJoinAndSelect('user.role', 'role')
+        .leftJoinAndSelect('user.photo', 'photo')
+        .where("LOWER(user.name) LIKE :search AND user.role = :role", { search: `%${search.toLowerCase()}%`, role: searchRole })
+        .orWhere("LOWER(user.email) LIKE :search AND user.role = :role", { search: `%${search.toLowerCase()}%`, role: searchRole })
+        .orWhere("LOWER(organization.name) LIKE :search AND user.role = :role", { search: `%${search.toLowerCase()}%`, role: searchRole })
+        .orWhere("LOWER(department.name) LIKE :search AND user.role = :role", { search: `%${search.toLowerCase()}%`, role: searchRole })
+        .getMany()
+        :
+        user.role === 'superadmin' ?
+          await this.repo.find({
+            relations: ['organization', 'department', 'role', 'photo'],
+            where:
+              { organization: { name: select }, role: { id: searchRole } }
+          })
+          :
+          await this.repo.find({
+            relations: ['department', 'role', 'photo'],
+            where:
+              { department: { name: select }, role: { id: searchRole } }
+          })
+      return users
+    }
   }
 
   async findOne(id: number) {
@@ -144,57 +156,32 @@ export class UserService {
   }
 
   async getCount(user: any) {
-    const roleId = user.role === 'superadmin' ? 2 : 3
+    const date = new Date()
+    let currentMonthCount = 0,
+    totalCount = 0
+
+    const roleId = await this.roleService.getIdByRole(user.role)
     const where = user.role === 'superadmin' ? 'user.role = ' + roleId : 'user.role=' + roleId + ' AND user.organization = ' + user.organizationId
 
+
+
     const monthlyCount = await this.repo.createQueryBuilder('user')
-      .select("TO_CHAR(TO_DATE(EXTRACT(Month from user.created_at)::text, 'MM'), 'Mon') AS month, EXTRACT(Month from user.created_at) AS monthNo, count(*)")
+      .select("TO_CHAR(TO_DATE(EXTRACT(Month from user.created_at)::text, 'MM'), 'Mon') AS month, EXTRACT(Month from user.created_at) AS month_no, count(*) :: int")
       .where(where)
-      .groupBy('month, monthNo')
-      .orderBy('monthNo', 'ASC')
+      .groupBy('month, month_no')
+      .orderBy('month_no', 'ASC')
       .getRawMany();
 
-    const currentMonthCount = await this.repo.createQueryBuilder('user')
-      .select("COUNT(*)")
-      .where("EXTRACT(MONTH from created_at) = EXTRACT(MONTH from now())")
-      .andWhere(where)
-      .getRawOne()
-
-    const totalCount = await this.repo.count({ where: { role: { id: roleId } } })
+    monthlyCount.forEach((element)=>{
+      totalCount += element.count
+      if(+element.month_no === (date.getMonth() + 1)){
+        currentMonthCount = element.count
+      }
+    })
 
     return { monthlyCount, currentMonthCount, totalCount };
   }
-  async findBySearch(search: string, select: string, user: any) {
-    const searchRole = user.role === 'superadmin' ? 2 : 3
-    if (!search && !select) {
-      return this.repo.find({ relations: ['organization', 'department', 'role', 'photo'], where: { role: { id: searchRole } } })
-    } else {
-      const users = search ? await this.repo.createQueryBuilder('user')
-        .leftJoinAndSelect('user.organization', 'organization')
-        .leftJoinAndSelect('user.department', 'department')
-        .leftJoinAndSelect('user.role', 'role')
-        .leftJoinAndSelect('user.photo', 'photo')
-        .where("LOWER(user.name) LIKE :search AND user.role = :role", { search: `%${search.toLowerCase()}%`, role: searchRole })
-        .orWhere("LOWER(user.email) LIKE :search AND user.role = :role", { search: `%${search.toLowerCase()}%`, role: searchRole })
-        .orWhere("LOWER(organization.name) LIKE :search AND user.role = :role", { search: `%${search.toLowerCase()}%`, role: searchRole })
-        .orWhere("LOWER(department.name) LIKE :search AND user.role = :role", { search: `%${search.toLowerCase()}%`, role: searchRole })
-        .getMany()
-        :
-        user.role === 'superadmin' ?
-          await this.repo.find({
-            relations: ['organization', 'department', 'role', 'photo'],
-            where:
-              { organization: { name: select }, role: { id: searchRole } }
-          })
-          :
-          await this.repo.find({
-            relations: ['department', 'role', 'photo'],
-            where:
-              { department: { name: select }, role: { id: searchRole } }
-          })
-      return users
-    }
-  }
+  
   //Otp routes
   async genOtp(email: string) {
     const user = await this.findByEmail(email)

@@ -53,7 +53,7 @@ function* getVendorsCount() {
 }
 function* searchVendor({ search, catSelect, subCatSelect }) {
   const res = yield fetchRequest(
-    `/vendors/findby?search=${search ? search : ``}&catSelect=${
+    `/vendors?search=${search ? search : ``}&catSelect=${
       catSelect ? catSelect : ``
     }&subCatSelect=${subCatSelect ? subCatSelect : ``}`,
     "GET"

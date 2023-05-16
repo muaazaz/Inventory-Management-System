@@ -18,8 +18,8 @@ export class ItemsController {
 
   @Roles(Role.Admin)
   @Post()
-  create(@Body() createItemDto: CreateItemDto) {
-    return this.itemsService.create(createItemDto);
+  create(@Body() createItemDto: CreateItemDto, @UserDecorator() user: any) {
+    return this.itemsService.create(createItemDto , user);
   }
 
   @Roles(Role.Admin)
@@ -27,20 +27,13 @@ export class ItemsController {
   getCount(@UserDecorator() user: any){
     return this.itemsService.getCount(user)
   }
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Serialize(AllItemsDto)
-  @Roles(Role.Admin, Role.Employee)
-  @Get('findby')
-  findBySeacrh(@Query() query: any, @UserDecorator() user: any) {
-    return this.itemsService.findBySearch(query.search, query.selectCategory, query.selectSubCategory, user);
-  }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(AllItemsDto)
   @Roles(Role.Admin, Role.Employee)
   @Get()
   findAll(@UserDecorator() user: any, @Query() query: any) {
-    return this.itemsService.findAll(user, query.type);
+    return this.itemsService.findAll(user, query);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
@@ -61,7 +54,7 @@ export class ItemsController {
 
   @Roles(Role.Admin)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.itemsService.remove(+id);
+  remove(@Param('id') id: string, @UserDecorator() user: any) {
+    return this.itemsService.remove(+id, user);
   }
 }

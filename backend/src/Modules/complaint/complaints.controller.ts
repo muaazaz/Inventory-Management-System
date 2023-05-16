@@ -30,9 +30,9 @@ export class ComplaintsController {
   @Roles(Role.Admin, Role.Employee, Role.SuperAdmin) 
   @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(AllComplaintsDto)
-  @Get('findby')
+  @Get('search')
   findBy(@Query() query: any, @UserDecorator() user:any){
-    return this.complaintsService.findBySearch(query.search, query.orgSelect, query.statusSelect, query.type, user)
+    return this.complaintsService.findBySearch(query, user)
   }
 
   @Roles(Role.Admin, Role.Employee, Role.SuperAdmin)

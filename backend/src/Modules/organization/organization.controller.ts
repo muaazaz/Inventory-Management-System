@@ -30,15 +30,8 @@ export class OrganizationController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(AllOrganizationsDto)
   @Get()
-  findAll() {
-    return this.organizationService.findAll();
-  }
-
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Serialize(AllOrganizationsDto)
-  @Get('findby')
-  findBy(@Query() query:any){
-    return this.organizationService.findBySearch(query.search, query.select)
+  findAll(@Query() query:any) {
+    return this.organizationService.findAll(query.search, query.select);
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

@@ -39,7 +39,7 @@ function* getOrgCount(){
     yield put({type: SET_ORGANIZATIONS_COUNT, payload:res})
 }
 function* searchOrganization ({search, select}){
-    const res = yield fetchRequest(`/organization/findby?search=${search? search : ``}&select=${select? select : ``}`, "GET")
+    const res = yield fetchRequest(`/organization?search=${search? search : ``}&select=${select? select : ``}`, "GET")
     yield put({type: SET_ORGANIZATION_SEARCH, payload:{organizations: res}})
  }
 

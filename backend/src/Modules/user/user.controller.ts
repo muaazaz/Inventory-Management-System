@@ -37,11 +37,6 @@ export class UserController {
     return this.userService.genOtp(body.email)
   }
 
-  @Patch('first/login/:id')
-  setPassword(@Body() body: FirstLoginDto, @Param('id') id: string){
-    return this.userService.firstLogin(+id, body.newPassword)
-  }
-
   @Patch('password')
   updatePassword(@Body() body: OtpDto){
     return this.userService.verifyOtp(body.email, body.otp, body.newPassword)
@@ -58,18 +53,9 @@ export class UserController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Serialize(UsersDto)
-  @Get('findby')
-  findBy(@Query() query:any, @UserDecorator() user:any){
-    return this.userService.findBySearch(query.search, query.select, user)
-  }
-
-  @Roles(Role.SuperAdmin, Role.Admin)
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Serialize(UsersDto)
   @Get()
-  findUsers(@UserDecorator() user: any) {
-    return this.userService.findAll(user);
+  findUsers(@Query() query:any, @UserDecorator() user: any) {
+    return this.userService.findAll(query.search, query.select, user);
   }
 
   @Roles(Role.SuperAdmin, Role.Admin, Role.Employee)

@@ -30,7 +30,7 @@ function* getCategorysCount(){
     yield put({type: SET_CATEGORY_COUNT, payload: res})
 }
 function* searchCategory ({search, select}){
-    const res = yield fetchRequest(`/category/findby?search=${search? search : ``}&select=${select? select : ``}`, "GET")
+    const res = yield fetchRequest(`/category?search=${search? search : ``}&select=${select? select : ``}`, "GET")
     yield put({type: SET_CATEGORY_SEARCH, payload:{category: res}})
 }
 function* getCategoriesSelect(){

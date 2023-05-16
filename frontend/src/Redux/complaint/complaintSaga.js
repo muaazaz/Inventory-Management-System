@@ -73,7 +73,7 @@ function* getComplaintsCount() {
 }
 function* searchComplaints({ search, statusSelect, orgSelect, dataType }) {
   const res = yield fetchRequest(
-    `/complaints/findby?search=${search ? search : ''}&orgSelect=${
+    `/complaints/search?search=${search ? search : ''}&orgSelect=${
       orgSelect ? orgSelect : ''
     }&statusSelect=${statusSelect ? statusSelect : ''}&type=${
       dataType ? dataType : ''
