@@ -16,6 +16,7 @@ const Input = ({
   id,
   label,
   setFormData,
+  formData,
   onChange
 }) => {
   const handleDataChange = (e) => {

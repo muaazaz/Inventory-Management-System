@@ -82,6 +82,7 @@ const EditVendor = () => {
           value={formData.name}
           divider={true}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           name={"contactNo"}
@@ -90,6 +91,7 @@ const EditVendor = () => {
           value={formData.contactNo}
           divider={true}
           setFormData={setFormData}
+          formData={formData}
         />
       </Box>
     </Box>

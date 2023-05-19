@@ -76,6 +76,7 @@ const EditDepartment = () => {
           value={formData.name}
           placeHolder={"name of department"}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           label={"Email Address"}
@@ -83,6 +84,7 @@ const EditDepartment = () => {
           placeHolder={"Email Address"}
           value={formData.email}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           name={"contactNo"}
@@ -90,6 +92,7 @@ const EditDepartment = () => {
           placeHolder={"Contact No."}
           value={formData.contactNo}
           setFormData={setFormData}
+          formData={formData}
         />
       </Box>
     </Box>

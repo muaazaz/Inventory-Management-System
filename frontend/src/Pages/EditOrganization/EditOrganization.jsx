@@ -124,6 +124,7 @@ const EditOrganization = ({ image, setFormId }) => {
         placeHolder={"Name of Organization"}
         value={formData.name}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         label={"Email Address"}
@@ -131,6 +132,7 @@ const EditOrganization = ({ image, setFormId }) => {
         placeHolder={"Email Address"}
         value={formData.email}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         textarea={true}
@@ -141,6 +143,7 @@ const EditOrganization = ({ image, setFormId }) => {
         value={formData.bio}
         placeHolder={"Short Bio here..."}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         name={"address"}
@@ -149,6 +152,7 @@ const EditOrganization = ({ image, setFormId }) => {
         value={formData.address}
         divider={false}
         setFormData={setFormData}
+        formData={formData}
       />
       <Select
         country={true}
@@ -166,6 +170,7 @@ const EditOrganization = ({ image, setFormId }) => {
         value={"name"}
         html={"name"}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         name={"zip"}
@@ -173,6 +178,7 @@ const EditOrganization = ({ image, setFormId }) => {
         value={formData.zip}
         placeHolder={"Zip Code"} 
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         value={formData.representativeName}
@@ -180,6 +186,7 @@ const EditOrganization = ({ image, setFormId }) => {
         name={"representativeName"}
         label={"Representative Name"}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         value={formData.representativeContactNo}
@@ -188,6 +195,7 @@ const EditOrganization = ({ image, setFormId }) => {
         label={"Representative Contact No."}
         divider={false}
         setFormData={setFormData}
+        formData={formData}
       />
     </Box>
   );

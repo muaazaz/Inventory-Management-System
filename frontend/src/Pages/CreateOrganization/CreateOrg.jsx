@@ -116,12 +116,14 @@ const CreateOrg = ( ) => {
         label={"Name of Organization"}
         placeHolder={"Name of Organization"}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         name={"email"}
         label={"Email Address"}
         placeHolder={"Email Address"}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         textarea={true}
@@ -131,12 +133,14 @@ const CreateOrg = ( ) => {
         columns={"63"}
         placeHolder={"Short Bio here..."}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         name={"Address"}
         placeHolder={"Address"}
         divider={false}
         setFormData={setFormData}
+        formData={formData}
       />
       <Select
         country={true}
@@ -154,18 +158,21 @@ const CreateOrg = ( ) => {
         value={"name"}
         html={"name"}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input 
         name={"zip"} 
         label={"Zip Code"} 
         placeHolder={"Zip Code"} 
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         placeHolder={"Representative Name"}
         label={"Representative Name"}
         name={"representativeName"}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         placeHolder={"Representative Contact No."}
@@ -173,6 +180,7 @@ const CreateOrg = ( ) => {
         name={"representativeContactNo"}
         divider={false}
         setFormData={setFormData}
+        formData={formData}
       />
     </Box>
   );

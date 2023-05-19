@@ -87,6 +87,7 @@ const CreateItem = () => {
           placeHolder={"Item Name"}
           divider={true}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           label={"Serial Number"}
@@ -94,6 +95,7 @@ const CreateItem = () => {
           placeHolder={"Enter Serial Number"}
           divider={true}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           textarea={true}
@@ -103,6 +105,7 @@ const CreateItem = () => {
           columns={"63"}
           placeHolder={"Enter description here..."}
           setFormData={setFormData}
+          formData={formData}
         />
         <Select
             label={"Category"}
@@ -112,6 +115,7 @@ const CreateItem = () => {
             value={"id"}
             html={"name"}
             setFormData={setFormData}
+            formData={formData}
         />
          <Select
             label={"Sub Category"}
@@ -123,12 +127,14 @@ const CreateItem = () => {
             disabled={disabled}
             divider={true}
             setFormData={setFormData}
+            formData={formData}
         />
         <Input
           name={"price"}
           label={"Price"}
           placeHolder={"Enter item price"}
           setFormData={setFormData}
+          formData={formData}
         />
          <Select
             label={"Vendor"}
@@ -140,6 +146,7 @@ const CreateItem = () => {
             html={"name"}
             divider={true}
             setFormData={setFormData}
+            formData={formData}
         />
       </Box>
     </Box>

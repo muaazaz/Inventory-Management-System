@@ -101,6 +101,7 @@ const CreateVendor = () => {
           placeHolder={"vendor name"}
           divider={true}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           name={"contactNo"}
@@ -108,6 +109,7 @@ const CreateVendor = () => {
           placeHolder={"Contact Number"}
           divider={true}
           setFormData={setFormData}
+          formData={formData}
         />
         <Select
           label={"Category"}

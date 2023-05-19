@@ -1,5 +1,4 @@
 import { Box, Divider, MenuItem, TextField, Typography } from "@mui/material";
-import { useEffect } from "react";
 import { dividerStyles, mainDiv, selectStyles, textDiv } from "./styles";
 
 const Select = ({
@@ -15,7 +14,8 @@ const Select = ({
   selfValue,
   divider,
   name,
-  setFormData
+  setFormData,
+  formData
 }) => {
   const width = noLabel ? "100%" : "60%"
   const handleDataChange = (e) => {

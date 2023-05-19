@@ -133,12 +133,14 @@ const CreateUser = ({ user }) => {
         label={"Name"}
         placeHolder={"Full Name"}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         name={"privateEmail"}
         label={"Email Address"}
         placeHolder={"Email Address"}
         setFormData={setFormData}
+        formData={formData}
       />
       {user === "Admin's" ? (
         <Select
@@ -149,6 +151,7 @@ const CreateUser = ({ user }) => {
           defaultValue={formData.organizationId}
           html={"name"}
           setFormData={setFormData}
+          formData={formData}
         />
       ) : (
         <Select
@@ -159,6 +162,7 @@ const CreateUser = ({ user }) => {
           value={"id"}
           html={"name"}
           setFormData={setFormData}
+          formData={formData}
         />
       )}
 
@@ -167,6 +171,7 @@ const CreateUser = ({ user }) => {
         label={"Contact Number"}
         placeHolder={"Contact Number"}
         setFormData={setFormData}
+        formData={formData}
       />
       <Box>
         <Typography sx={{ fontWeight: "900", fontSize: "1.5em" }}>
@@ -183,6 +188,7 @@ const CreateUser = ({ user }) => {
         placeHolder={"Email Address"}
         divider={false}
         setFormData={setFormData}
+        formData={formData}
       />
       <Input
         name={"password"}
@@ -190,6 +196,7 @@ const CreateUser = ({ user }) => {
         placeHolder={"Password"}
         type={"password"}
         setFormData={setFormData}
+        formData={formData}
       />
     </Box>
   );

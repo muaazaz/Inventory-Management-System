@@ -105,6 +105,7 @@ const EditItem = () => {
           placeHolder={"Item Name"}
           value={formData.name}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           name={"serialNo"}
@@ -112,6 +113,7 @@ const EditItem = () => {
           placeHolder={"Enter Serial Number"}
           value={formData.serialNo}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           textarea={true}
@@ -122,6 +124,7 @@ const EditItem = () => {
           columns={"63"}
           placeHolder={"Enter description here..."}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           name={"price"}
@@ -129,6 +132,7 @@ const EditItem = () => {
           placeHolder={"Enter item price"}
           value={formData.price}
           setFormData={setFormData}
+          formData={formData}
         />
         <Box sx={depriciationDiv}>
           <Input
@@ -138,6 +142,7 @@ const EditItem = () => {
             divider={false}
             placeHolder={"Enter item's current price"}
             setFormData={setFormData}
+            formData={formData}
           />
           <Button
             sx={depriciationButton}
@@ -157,6 +162,7 @@ const EditItem = () => {
         />
         <Input
           label={"Depriciation Percentage"}
+          formData={formData}
           disable={true}
           placeHolder={"calculating....."}
           value={formData.depreciationPercentage}

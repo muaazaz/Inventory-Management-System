@@ -101,6 +101,7 @@ const CreateRequest = () => {
           value={"id"}
           html={"name"}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           textarea={true}
@@ -110,6 +111,7 @@ const CreateRequest = () => {
           columns={"63"}
           placeHolder={"Enter description here..."}
           setFormData={setFormData}
+          formData={formData}
         />
       </Box>
     </Box>

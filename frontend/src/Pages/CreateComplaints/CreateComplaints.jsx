@@ -68,6 +68,7 @@ const CreateComplaint = () => {
           label={"Title"}
           placeHolder={"Enter a title for compaint"}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           label={"Description"}
@@ -77,6 +78,7 @@ const CreateComplaint = () => {
           rows={"10"}
           columns={"60"}
           setFormData={setFormData}
+          formData={formData}
         />
       </Box>
       <Box sx={imageUploadDiv}>

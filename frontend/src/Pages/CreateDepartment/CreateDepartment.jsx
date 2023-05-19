@@ -72,17 +72,20 @@ const CreateDepartment = () => {
           label={"Name"}
           placeHolder={"name of department"}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           name={"email"}
           label={"Email Address"}
           placeHolder={"Email Address"}
           setFormData={setFormData}
+          formData={formData}
         />
         <Input
           name={"Contact No."}
           placeHolder={"Contact No."}
           setFormData={setFormData}
+          formData={formData}
         />
       </Box>
     </Box>
