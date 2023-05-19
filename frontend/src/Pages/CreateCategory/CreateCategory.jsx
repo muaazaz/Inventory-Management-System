@@ -93,7 +93,7 @@ const CreateCategory = () => {
       <Divider sx={{ margin: "2% 0" }} />
       <Box component="form" id="Category-form" onSubmit={handleSubmit}>
         <Input
-          name={"Category Name"}
+          label={"Category Name"}
           placeHolder={"name of category"}
           value={name}
           onChange={(e) => {
@@ -104,7 +104,7 @@ const CreateCategory = () => {
         {inputArray.map((item, i) => (
           <Input
             key={i}
-            name={item.name}
+            label={item.name}
             placeHolder={item.placeHolder}
             id={i}
             value={item.value}

@@ -76,28 +76,20 @@ const EditVendor = () => {
       <Divider sx={dividerStyles} />
       <Box component="form" onSubmit={handleSubmit} id="vendor-form">
         <Input
-          name={"Name"}
+          name={"name"}
+          label={"Name"}
           placeHolder={"vendor name"}
           value={formData.name}
           divider={true}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              name: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
         <Input
-          name={"Contact Number"}
+          name={"contactNo"}
+          label={"Contact Number"}
           placeHolder={"Contact Number"}
           value={formData.contactNo}
           divider={true}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              contactNo: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
       </Box>
     </Box>

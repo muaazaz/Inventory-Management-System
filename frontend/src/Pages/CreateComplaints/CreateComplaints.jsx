@@ -64,29 +64,19 @@ const CreateComplaint = () => {
       <Divider sx={{ m: "2% 0" }} />
       <Box component="form" id="complaint-form" onSubmit={handleSubmit}>
         <Input
-          name={"Title"}
-          label={true}
+          name={"title"}
+          label={"Title"}
           placeHolder={"Enter a title for compaint"}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              title: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
         <Input
-          name={"Description"}
-          label={true}
+          label={"Description"}
+          name={"description"}
           placeHolder={"Enter description here..."}
           textarea={true}
           rows={"10"}
           columns={"60"}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              description: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
       </Box>
       <Box sx={imageUploadDiv}>
@@ -108,12 +98,10 @@ const CreateComplaint = () => {
         </Box>
         <PhotoUpload
           setImage={(image) => {
-            setTimeout(() => {
               setFormData({
                 ...formData,
                 photos: [...formData.photos, { image }],
               });
-            }, 1000);
           }}
         />
       </Box>

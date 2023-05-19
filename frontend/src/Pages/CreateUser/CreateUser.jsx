@@ -130,63 +130,43 @@ const CreateUser = ({ user }) => {
       )}
       <Input
         name={"Name"}
+        label={"Name"}
         placeHolder={"Full Name"}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            name: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Input
-        name={"Email Address"}
+        name={"privateEmail"}
+        label={"Email Address"}
         placeHolder={"Email Address"}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            privateEmail: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       {user === "Admin's" ? (
         <Select
           label={"Organization"}
+          name={"organizationId"}
           menuItems={orgData.organizations}
           value={"id"}
           defaultValue={formData.organizationId}
           html={"name"}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              organizationId: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
       ) : (
         <Select
           label={"Department"}
+          name={"departmentId"}
           menuItems={departmentData.departments}
           defaultValue={formData.departmentId}
           value={"id"}
           html={"name"}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              departmentId: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
       )}
 
       <Input
-        name={"Contact Number"}
+        name={"contactNo"}
+        label={"Contact Number"}
         placeHolder={"Contact Number"}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            contactNo: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Box>
         <Typography sx={{ fontWeight: "900", fontSize: "1.5em" }}>
@@ -198,26 +178,18 @@ const CreateUser = ({ user }) => {
         </Typography>
       </Box>
       <Input
-        name={"Email Address"}
+        name={"email"}
+        label={"Email Address"}
         placeHolder={"Email Address"}
         divider={false}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            email: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Input
-        name={"Password"}
+        name={"password"}
+        label={"Password"}
         placeHolder={"Password"}
         type={"password"}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            password: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
     </Box>
   );

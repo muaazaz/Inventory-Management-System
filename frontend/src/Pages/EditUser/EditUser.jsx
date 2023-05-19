@@ -16,7 +16,6 @@ const EditUser = ({ user }) => {
     image: "",
     email: "",
   }),
-    [error, setError] = useState(""),
     { id } = useParams(),
     navigate = useNavigate(),
     dispatch = useDispatch(),
@@ -94,42 +93,26 @@ const EditUser = ({ user }) => {
             })} />
           </Box>
           <Divider />
-          {error && <Typography variant="content">Error: {error}</Typography>}
           <Input
-            name={"Name"}
+            name={"name"}
+            label={"Name"}
             placeHolder={"Full Name"}
             value={formData.name}
-            onChange={(e) => {
-              setFormData({
-                ...formData,
-                name: e.target.value,
-              });
-              setError("")
-            }}
+            setFormData={setFormData}
           />
           <Input
-            name={"Email Address"}
+            label={"Email Address"}
+            name={"email"}
             placeHolder={"Email Address"}
             value={formData.email}
-            onChange={(e) => {
-              setFormData({
-                ...formData,
-                email: e.target.value,
-              });
-              setError("")
-            }}
+            setFormData={setFormData}
           />
           <Input
-            name={"Contact Number"}
+            label={"Contact Number"}
+            name={"contactNo"}
             placeHolder={"Contact Number"}
             value={formData.contactNo}
-            onChange={(e) => {
-              setFormData({
-                ...formData,
-                contactNo: e.target.value,
-              });
-              setError("")
-            }}
+            setFormData={setFormData}
           />
           <Box>
           </Box>

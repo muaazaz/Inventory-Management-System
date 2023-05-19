@@ -30,7 +30,23 @@ const EditItem = () => {
     dispatch = useDispatch(),
     { itemData } = useSelector((state) => state);
 
-  const handleSubmit = (e) => {
+    const calculateDepreciation = () => {
+      setFormData({
+        ...formData,
+        depriciatedPrice:
+          parseFloat(formData.price) -
+          parseFloat(formData.currentPrice),
+        depreciationPercentage:
+          `${(parseFloat(
+            parseFloat(formData.price) -
+              parseFloat(formData.currentPrice)
+          ) *
+            100) /
+          parseFloat(formData.price)}%`,
+      });
+    }
+  
+    const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(editItem({ id, formData }));
     navigate(-1);
@@ -84,97 +100,63 @@ const EditItem = () => {
       <Divider sx={dividerStyles} />
       <Box component="form" onSubmit={handleSubmit} id="item-form">
         <Input
+          label={"name"}
           name={"Item Name"}
           placeHolder={"Item Name"}
           value={formData.name}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              name: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
         <Input
-          name={"Serial Number"}
+          name={"serialNo"}
+          label={"Serial Number"}
           placeHolder={"Enter Serial Number"}
           value={formData.serialNo}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              serialNo: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
         <Input
           textarea={true}
           value={formData.description}
-          name={"Description"}
+          name={"description"}
+          label={"Description"}
           rows={"10"}
           columns={"63"}
           placeHolder={"Enter description here..."}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              description: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
         <Input
-          name={"Price"}
+          name={"price"}
+          label={"Price"}
           placeHolder={"Enter item price"}
           value={formData.price}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              price: parseFloat(e.target.value),
-            });
-          }}
+          setFormData={setFormData}
         />
         <Box sx={depriciationDiv}>
           <Input
-            name={"Current Price"}
+            name={"currentPrice"}
+            label={"Current Price"}
             value={formData.currentPrice}
             divider={false}
             placeHolder={"Enter item's current price"}
-            onChange={(e) => {
-              setFormData({
-                ...formData,
-                currentPrice: parseFloat(e.target.value),
-              });
-            }}
+            setFormData={setFormData}
           />
           <Button
             sx={depriciationButton}
             variant="contained"
             color="success"
-            onClick={() => {
-              setFormData({
-                ...formData,
-                depriciatedPrice:
-                  parseFloat(formData.price) -
-                  parseFloat(formData.currentPrice),
-                depreciationPercentage:
-                  `${(parseFloat(
-                    parseFloat(formData.price) -
-                      parseFloat(formData.currentPrice)
-                  ) *
-                    100) /
-                  parseFloat(formData.price)}%`,
-              });
-            }}
+            onClick={calculateDepreciation}
           >
             Calculate Depreciation
           </Button>
         </Box>
         <Input
-          name={"Depriciated Price"}
+          label={"Depriciated Price"}
           placeHolder={"calculating....."}
           disable={true}
           value={formData.depriciatedPrice}
           divider={false}
         />
         <Input
-          name={"Depriciation Percentage"}
+          label={"Depriciation Percentage"}
           disable={true}
           placeHolder={"calculating....."}
           value={formData.depreciationPercentage}

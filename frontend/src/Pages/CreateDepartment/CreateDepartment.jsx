@@ -21,7 +21,7 @@ const CreateDepartment = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(createDepartment(formData))
-    navigate("/departments")
+    navigate(-1)
   };
   useEffect(()=>{
     if(departmentData.error){
@@ -68,31 +68,21 @@ const CreateDepartment = () => {
       <Divider sx={{margin: "2% 0"}}/>
       <Box component="form" id="department-form" onSubmit={handleSubmit}>
         <Input
-          name={"Name"}
+          name={"name"}
+          label={"Name"}
           placeHolder={"name of department"}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              name: e.target.value});
-          }}
+          setFormData={setFormData}
         />
         <Input
-          name={"Email Address"}
+          name={"email"}
+          label={"Email Address"}
           placeHolder={"Email Address"}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              email: e.target.value});
-          }}
+          setFormData={setFormData}
         />
         <Input
           name={"Contact No."}
           placeHolder={"Contact No."}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              contactNo: e.target.value});
-          }}
+          setFormData={setFormData}
         />
       </Box>
     </Box>

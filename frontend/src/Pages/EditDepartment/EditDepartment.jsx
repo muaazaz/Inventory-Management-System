@@ -71,34 +71,25 @@ const EditDepartment = () => {
       <Divider sx={{margin: "2% 0"}}/>
       <Box component="form" id="department-form" onSubmit={handleSubmit}>
         <Input
-          name={"Name"}
+          label={"Name"}
+          name={"name"}
           value={formData.name}
           placeHolder={"name of department"}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              name: e.target.value});
-          }}
+          setFormData={setFormData}
         />
         <Input
-          name={"Email Address"}
+          label={"Email Address"}
+          name={"email"}
           placeHolder={"Email Address"}
           value={formData.email}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              email: e.target.value});
-          }}
+          setFormData={setFormData}
         />
         <Input
-          name={"Contact No."}
+          name={"contactNo"}
+          label={"Contact No."}
           placeHolder={"Contact No."}
           value={formData.contactNo}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              contactNo: e.target.value});
-          }}
+          setFormData={setFormData}
         />
       </Box>
     </Box>

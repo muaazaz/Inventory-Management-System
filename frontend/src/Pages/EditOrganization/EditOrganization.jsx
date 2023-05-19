@@ -119,52 +119,36 @@ const EditOrganization = ({ image, setFormId }) => {
       </Box>
       <Divider sx={{ margin: "2% 0" }} />
       <Input
-        name={"Name of Organization"}
+        label={"Name of Organization"}
+        name={"name"}
         placeHolder={"Name of Organization"}
         value={formData.name}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            name: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Input
-        name={"Email Address"}
+        label={"Email Address"}
+        name={"email"}
         placeHolder={"Email Address"}
         value={formData.email}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            email: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Input
         textarea={true}
-        name={"Bio"}
+        label={"Bio"}
+        name={"bio"}
         rows={"10"}
         columns={"63"}
         value={formData.bio}
         placeHolder={"Short Bio here..."}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            bio: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Input
-        name={"Address"}
+        name={"address"}
+        label={"Address"}
         placeHolder={"Address"}
         value={formData.address}
         divider={false}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            address: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Select
         country={true}
@@ -177,50 +161,33 @@ const EditOrganization = ({ image, setFormId }) => {
         menuItems={cities}
         defaultValue={formData.city}
         label={"City"}
+        name={"city"}
         disabled={disabled}
         value={"name"}
         html={"name"}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            city: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Input
-        name={"Zip Code"} 
+        name={"zip"}
+        label={"Zip Code"} 
         value={formData.zip}
         placeHolder={"Zip Code"} 
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            zip: e.target.value,
-          });
-        }}/>
+        setFormData={setFormData}
+      />
       <Input
         value={formData.representativeName}
         placeHolder={"Representative Name"}
-        label={true}
-        name={"Representative Name"}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            representativeName: e.target.value,
-          });
-        }}
+        name={"representativeName"}
+        label={"Representative Name"}
+        setFormData={setFormData}
       />
       <Input
         value={formData.representativeContactNo}
         placeHolder={"Representative Contact No."}
-        label={true}
-        name={"Representative Contact No."}
+        name={"representativeContactNo"}
+        label={"Representative Contact No."}
         divider={false}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            representativeContactNo: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
     </Box>
   );

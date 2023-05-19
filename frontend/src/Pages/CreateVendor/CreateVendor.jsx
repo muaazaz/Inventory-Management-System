@@ -10,7 +10,7 @@ import {
   multiSelectLabel,
   saveButton,
 } from "./styles";
-import "./createVendor.css"
+import "./createVendor.css";
 import Input from "../../Components/Shared/Input/Input";
 import Select from "../../Components/Shared/Select/Select";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -25,32 +25,41 @@ const CreateVendor = () => {
     [formData, setFormData] = useState({
       name: "",
       contactNo: "",
-      categoryId: ""
+      categoryId: "",
     }),
     [subCategories, setSubCategories] = useState([]),
     [subCategroiesSelect, setSubCategoriesSelect] = useState([]),
     [disabled, setDisabled] = useState(true),
     dispatch = useDispatch(),
-    {categoryData, vendorData} = useSelector((state)=>state)
+    { categoryData, vendorData } = useSelector((state) => state);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const tempArray = []
-    subCategories.forEach((category)=>{
-      tempArray.push(category.value)
-    })
-    dispatch(createVendor({...formData, categoriesId: tempArray}))
-    navigate("/vendors")
-  }
+    const tempArray = [];
+    subCategories.forEach((category) => {
+      tempArray.push(category.value);
+    });
+    dispatch(createVendor({ ...formData, categoriesId: tempArray }));
+    navigate(-1);
+  };
 
-  useEffect(()=>{
-    dispatch(getCategoriesSelect())
-    if(formData.categoryId){
-      categoryData.categories.forEach((category)=>{
-        if(category.id === formData.categoryId) setSubCategoriesSelect(category.childern)
-      })
+  const handleCategorySelect = (e) => {
+    setFormData({
+      ...formData,
+      categoryId: e.target.value,
+    });
+    setDisabled(false);
+  };
+
+  useEffect(() => {
+    dispatch(getCategoriesSelect());
+    if (formData.categoryId) {
+      categoryData.categories.forEach((category) => {
+        if (category.id === formData.categoryId)
+          setSubCategoriesSelect(category.childern);
+      });
     }
-  },[dispatch, formData])
+  }, [dispatch, formData]);
 
   return (
     <Box sx={mainDivStyles}>
@@ -87,26 +96,18 @@ const CreateVendor = () => {
       <Divider sx={dividerStyles} />
       <Box component="form" onSubmit={handleSubmit} id="vendor-form">
         <Input
-          name={"Name"}
+          name={"name"}
+          label={"Name"}
           placeHolder={"vendor name"}
           divider={true}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              name: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
         <Input
-          name={"Contact Number"}
+          name={"contactNo"}
+          label={"Contact Number"}
           placeHolder={"Contact Number"}
           divider={true}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              contactNo: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
         <Select
           label={"Category"}
@@ -115,26 +116,20 @@ const CreateVendor = () => {
           value={"id"}
           html={"name"}
           divider={true}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              categoryId: e.target.value,
-            });
-            setDisabled(false)
-          }}
+          onChange={handleCategorySelect}
         />
         <Box sx={multiSelectDiv}>
-        <Typography sx={multiSelectLabel}>Sub Categories</Typography>
-        <MultiSelect
-          options={subCategroiesSelect}
-          disabled={disabled}
-          value={subCategories}
-          onChange={setSubCategories}
-          labelledBy="Sub Categories"
-          className="Sub-Categories"
-        />
+          <Typography sx={multiSelectLabel}>Sub Categories</Typography>
+          <MultiSelect
+            options={subCategroiesSelect}
+            disabled={disabled}
+            value={subCategories}
+            onChange={setSubCategories}
+            labelledBy="Sub Categories"
+            className="Sub-Categories"
+          />
         </Box>
-        <Divider sx={{m: "2% 0"}}/>
+        <Divider sx={{ m: "2% 0" }} />
       </Box>
     </Box>
   );

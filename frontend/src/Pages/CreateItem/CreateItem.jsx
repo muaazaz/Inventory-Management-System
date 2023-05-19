@@ -82,89 +82,64 @@ const CreateItem = () => {
       <Divider sx={dividerStyles} />
       <Box component="form" onSubmit={handleSubmit} id="item-form">
         <Input
-          name={"Item Name"}
+          name={"name"}
+          label={"Item Name"}
           placeHolder={"Item Name"}
           divider={true}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              name: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
         <Input
-          name={"Serial Number"}
+          label={"Serial Number"}
+          name={"serialNo"}
           placeHolder={"Enter Serial Number"}
           divider={true}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              serialNo: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
         <Input
           textarea={true}
-          name={"Description"}
+          name={"description"}
+          label={"Description"}
           rows={"10"}
           columns={"63"}
           placeHolder={"Enter description here..."}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              description: e.target.value,
-            });
-          }}
+          setFormData={setFormData}
         />
         <Select
             label={"Category"}
+            name={"categoryId"}
             menuItems={categoryData?.categories}
             defaultValue={formData.categoryId}
             value={"id"}
             html={"name"}
-            onChange={(e)=>{
-              setFormData({
-                ...formData,
-                categoryId: e.target.value
-              })
-              setDisabled(false)
-          }}
+            setFormData={setFormData}
         />
          <Select
             label={"Sub Category"}
+            name={"subCategoryId"}
             menuItems={subCategories}
             defaultValue={formData.subCategoryId}
             value={"value"}
             html={"label"}
             disabled={disabled}
             divider={true}
-            onChange={(e)=>{setFormData({
-                ...formData,
-                subCategoryId: e.target.value
-            })}}
+            setFormData={setFormData}
         />
         <Input
-          name={"Price"}
+          name={"price"}
+          label={"Price"}
           placeHolder={"Enter item price"}
-          onChange={(e) => {
-            setFormData({
-              ...formData,
-              price: parseInt(e.target.value),
-            });
-          }}
+          setFormData={setFormData}
         />
          <Select
             label={"Vendor"}
+            name={"vendorId"}
             menuItems={vendorData?.vendors? vendorData.vendors : []}
             disabled={vendorData?.vendors ? false : true}
             defaultValue={formData.vendorId}
             value={"id"}
             html={"name"}
             divider={true}
-            onChange={(e)=>{setFormData({
-                ...formData,
-                vendorId: e.target.value
-            })}}
+            setFormData={setFormData}
         />
       </Box>
     </Box>

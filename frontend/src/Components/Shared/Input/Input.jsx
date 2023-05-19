@@ -3,9 +3,8 @@ import "./input.css";
 
 const Input = ({
   name,
-  onChange,
   type,
-  label,
+  showLabel,
   rows,
   columns,
   textarea,
@@ -14,12 +13,21 @@ const Input = ({
   require,
   value,
   disable,
-  id
+  id,
+  label,
+  setFormData,
+  onChange
 }) => {
+  const handleDataChange = (e) => {
+    setFormData({
+      ...formData,
+    [name]: e.target.value,
+    });
+  }
   return (
     <>
       <div className="input-fields">
-        {label && <label htmlFor={name}>{name}</label>}
+        {showLabel && <label htmlFor={name}>{label}</label>}
         {textarea ? (
           <>
             <textarea
@@ -31,19 +39,20 @@ const Input = ({
               rows={rows}
               defaultValue={value}
               placeholder={placeHolder}
-              onChange={onChange}
+              onChange={onChange ? onchange : handleDataChange}
               disabled={disable}
             ></textarea>
           </>
         ) : (
           <input
             type={type}
+            name={name}
             autoComplete="on"
             id={id}
             defaultValue={value}
             required={require}
             placeholder={placeHolder}
-            onChange={onChange}
+            onChange={onChange ? onchange : handleDataChange}
             disabled={disable}
           />
         )}
@@ -58,7 +67,7 @@ Input.defaultProps = {
   rows: "30",
   columns: "30",
   textarea: false,
-  label: true,
+  showLabel: true,
   divider: true,
   require: true,
   disable: false,

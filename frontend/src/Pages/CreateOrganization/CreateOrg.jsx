@@ -33,7 +33,7 @@ const CreateOrg = ( ) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     dispatch(createOrganization(formData))
-    navigate("/organizations")
+    navigate(-1)
   };
 
   const handleCountrySelect = (e) => {
@@ -112,48 +112,31 @@ const CreateOrg = ( ) => {
       <Divider />
       {error && <Alert severity="error">{error}</Alert>}
       <Input
-        name={"Name of Organization"}
+        name={"name"}
+        label={"Name of Organization"}
         placeHolder={"Name of Organization"}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            name: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Input
-        name={"Email Address"}
+        name={"email"}
+        label={"Email Address"}
         placeHolder={"Email Address"}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            email: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Input
         textarea={true}
-        name={"Bio"}
+        name={"bio"}
+        label={"Bio"}
         rows={"10"}
         columns={"63"}
         placeHolder={"Short Bio here..."}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            bio: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Input
         name={"Address"}
         placeHolder={"Address"}
         divider={false}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            address: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Select
         country={true}
@@ -165,48 +148,31 @@ const CreateOrg = ( ) => {
       <Select
         menuItems={cities}
         label={"City"}
+        name={"city"}
         disabled={disabled}
         defaultValue={formData.city}
         value={"name"}
         html={"name"}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            city: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
       <Input 
-        name={"Zip Code"} 
+        name={"zip"} 
+        label={"Zip Code"} 
         placeHolder={"Zip Code"} 
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            zip: e.target.value,
-          });
-        }}/>
+        setFormData={setFormData}
+      />
       <Input
         placeHolder={"Representative Name"}
-        label={true}
-        name={"Representative Name"}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            representativeName: e.target.value,
-          });
-        }}
+        label={"Representative Name"}
+        name={"representativeName"}
+        setFormData={setFormData}
       />
       <Input
         placeHolder={"Representative Contact No."}
-        label={true}
-        name={"Representative Contact No."}
+        label={"Representative Contact No."}
+        name={"representativeContactNo"}
         divider={false}
-        onChange={(e) => {
-          setFormData({
-            ...formData,
-            representativeContactNo: e.target.value,
-          });
-        }}
+        setFormData={setFormData}
       />
     </Box>
   );

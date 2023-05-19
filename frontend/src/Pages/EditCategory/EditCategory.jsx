@@ -28,6 +28,7 @@ const EditCategory = () => {
       setName(categoryDetail.name);
     }
   }, [dispatch, categoryDetail]);
+
   return (
     <Box sx={mainDiv}>
       <Button
@@ -59,7 +60,7 @@ const EditCategory = () => {
       </Button>
       <Box component="form" id="category-edit" onSubmit={handleSubmit}>
         <Input
-          name={"Category Name"}
+          label={"Category Name"}
           placeHolder={"Category Name"}
           value={name}
           onChange={(e) => {

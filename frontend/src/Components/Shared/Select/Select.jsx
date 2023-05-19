@@ -14,9 +14,16 @@ const Select = ({
   onChange,
   selfValue,
   divider,
+  name,
+  setFormData
 }) => {
   const width = noLabel ? "100%" : "60%"
-  useEffect(() => {}, [menuItems]);
+  const handleDataChange = (e) => {
+    setFormData({
+      ...formData,
+    [name]: e.target.value,
+    });
+  }
   return (
     <>
       <Box sx={mainDiv}>
@@ -35,7 +42,7 @@ const Select = ({
               defaultValue={""}
               value={defaultValue}
               label={label}
-              onChange={onChange}
+              onChange={onchange ? onChange : handleDataChange}
               name={label}
               disabled={disabled}
             >
