@@ -41,22 +41,23 @@ import EditDepartment from "../../Pages/EditDepartment/EditDepartment";
 import EditItem from "../../Pages/EditItem/EditItem";
 import EditVendor from "../../Pages/EditVendor/EditVendor";
 import AddNewSubCategory from "../../Pages/AddNewSubCategory/AddNewSubCategory";
+import { Role } from "../../Constant/componentConstants";
 
 function Router() {
   return (
     <div className="App">
       <Routes>
-        <Route element={<Protected allowedRoles={["superadmin", "admin", "employee"]} />}>
+        <Route element={<Protected allowedRoles={[Role.SuperAdmin, Role.Admin, Role.Employee]} />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="complaints" element={<Complaints />} />
           <Route path="complaints/details/:id" element={<ComplaintDetails />} />
         </Route>
-        <Route element={<Protected allowedRoles={[ "admin", "employee"]} />}>
+        <Route element={<Protected allowedRoles={[ Role.Admin, Role.Employee]} />}>
           <Route path="complaints/create" element={<CreateComplaint />} />
           <Route path="requests" element={<Requests />} />
           <Route path="requests/details/:id" element={<RequestDetails />} />
         </Route>
-        <Route element={<Protected allowedRoles={[ "superadmin", "admin"]} />}>
+        <Route element={<Protected allowedRoles={[ Role.SuperAdmin, Role.Admin]} />}>
           <Route path="user" element={<Users />} />
           <Route path="user/edit/:id" element={<EditUser />} />
           <Route path="user/admins/details/:id" element={<AdminDetails />} />
@@ -64,13 +65,13 @@ function Router() {
           <Route path="user/admin/create" element={<CreateUser user={"Admin's"}/>} />
           <Route path="user/employee/create" element={<CreateUser user={"Employee's"}/>} />
         </Route>
-        <Route element={<Protected allowedRoles={['superadmin']}/>}>
+        <Route element={<Protected allowedRoles={[Role.SuperAdmin]}/>}>
           <Route path="organizations" element={<Organizations />}/>
           <Route path="organizations/details/:id" element={<OrgDetails />}/>
           <Route path="organizations/edit/:id" element={<EditOrganization />}/>
           <Route path="organizations/create" element={<CreateOrg />} />
         </Route>
-        <Route element={<Protected allowedRoles={['admin']}/>}>
+        <Route element={<Protected allowedRoles={[Role.Admin]}/>}>
           <Route path="departments" element={<Department />} />
           <Route path="departments/edit/:id" element={<EditDepartment />} />
           <Route path="departments/create" element={<CreateDepartment />} />
@@ -91,7 +92,7 @@ function Router() {
           <Route path="vendors/details/:id" element={<VendorDetails />} />
           <Route path="vendors/edit/:id" element={<EditVendor />} />
         </Route>
-        <Route element={<Protected allowedRoles={['employee']}/>}>
+        <Route element={<Protected allowedRoles={[Role.Employee]}/>}>
           <Route path="dashboard/edit/profile" element={<EmployeeEdit />} />
           <Route path="requests/create" element={<CreateRequest />} />
         </Route>

@@ -36,7 +36,7 @@ export default function Inventory() {
     [search, setSearch] = useState(""),
     [categorySelect, setCatSelect] = useState(""),
     [subCatSelect, setSubCatSelect] = useState(""),
-    [subCategroies, setSubCategories] = useState([]),
+    [subCategories, setSubCategories] = useState([]),
     [disabled, setDisabled] = useState(true),
     dispatch = useDispatch(),
     { itemData, categoryData } = useSelector((state) => state);
@@ -45,6 +45,38 @@ export default function Inventory() {
     dispatch(getItems());
     dispatch(getCategories());
   }, [dispatch]);
+
+  const handleSearch = (e) => {
+    dispatch(searchItems(e.target.value));
+    setSearch(e.target.value);
+    setCatSelect("");
+    setSubCatSelect("");
+    setDisabled(true);
+  };
+
+  const handleSelectCategory = (e) => {
+    dispatch(selectUsingCategory(e.target.value));
+    setCatSelect(e.target.value);
+    setSubCatSelect("");
+    setSearch("");
+    categoryData.categories.forEach((category) => {
+      if (category.name === e.target.value) {
+        setSubCategories(category.subCategories);
+      }
+    });
+    setDisabled(false);
+  };
+
+  const handleSelectSubCategory = (e) => {
+    dispatch(
+      selectUsingSubCategory({
+        subCatSelect: e.target.value,
+        categorySelect,
+      })
+    );
+    setSubCatSelect(e.target.value);
+    setSearch("");
+  };
 
   return (
     <Box sx={main}>
@@ -55,13 +87,7 @@ export default function Inventory() {
             value={search}
             sx={{ textAlign: "center", m: 1 }}
             placeholder="Search something..."
-            onChange={(e) => {
-              dispatch(searchItems(e.target.value));
-              setSearch(e.target.value);
-              setCatSelect("");
-              setSubCatSelect("");
-              setDisabled(true);
-            }}
+            onChange={handleSearch}
           />
           <IconButton type="button" sx={{ p: "5%" }} color="primary">
             <SearchIcon />
@@ -75,36 +101,17 @@ export default function Inventory() {
             value={"name"}
             html={"name"}
             noLabel={true}
-            onChange={(e) => {
-              dispatch(selectUsingCategory(e.target.value));
-              setCatSelect(e.target.value);
-              setSubCatSelect("");
-              setSearch("");
-              categoryData.categories.forEach((category) => {
-                if (category.name === e.target.value)
-                  setSubCategories(category.childern);
-              });
-              setDisabled(false);
-            }}
+            onChange={handleSelectCategory}
           />
           <Select
             label={"Select Sub-Category"}
-            menuItems={subCategroies}
+            menuItems={subCategories}
             defaultValue={subCatSelect}
             disabled={disabled}
-            value={"label"}
-            html={"label"}
+            value={"name"}
+            html={"name"}
             noLabel={true}
-            onChange={(e) => {
-              dispatch(
-                selectUsingSubCategory({
-                  subCatSelect: e.target.value,
-                  categorySelect,
-                })
-              );
-              setSubCatSelect(e.target.value);
-              setSearch("");
-            }}
+            onChange={handleSelectSubCategory}
           />
         </Box>
         <Button

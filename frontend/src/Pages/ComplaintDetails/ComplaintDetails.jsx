@@ -23,6 +23,7 @@ import {
   editComplaint,
   getComplaintDetails,
 } from "../../Redux/complaint/complaintAction";
+import { Role } from "../../Constant/componentConstants";
 
 const ComplaintDetails = () => {
   const navigate = useNavigate(),
@@ -110,8 +111,8 @@ const ComplaintDetails = () => {
               />
             </>
           )}
-          {userValidation.role !== "employee" &&
-            userValidation.role !== "admin" && (
+          {userValidation.role !== Role.Employee &&
+            userValidation.role !== Role.Admin && (
               <>
                 <Typography variant="content" sx={complaintUserText}>
                   Organization

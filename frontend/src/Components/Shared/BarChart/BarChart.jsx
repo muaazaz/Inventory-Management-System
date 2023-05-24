@@ -8,15 +8,11 @@ const BarChart = (props) => {
   let colors = props.dualLineChart ? ["#007FFF", "#00A572"] : ["#007FFF"];
   const [loading, setLoading] = useState(true);
 
-  const callLoading = () =>{
-    setTimeout(()=>{
-      setLoading(false)
-    },2000)
-  }
-
   useEffect(() => {
-    callLoading()
-  }, []);
+    if(props.data){
+      setLoading(false)
+    }
+  }, [props.data]);
 
   const options = {
     chart:{

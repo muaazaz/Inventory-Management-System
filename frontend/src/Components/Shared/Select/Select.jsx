@@ -42,7 +42,7 @@ const Select = ({
               defaultValue={""}
               value={defaultValue}
               label={label}
-              onChange={onchange ? onChange : handleDataChange}
+              onChange={onChange ? onChange : handleDataChange}
               name={label}
               disabled={disabled}
             >

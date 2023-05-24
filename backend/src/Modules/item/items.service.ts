@@ -21,13 +21,12 @@ export class ItemsService {
     private vendorService: VendorsService
   ) { }
 
-  async create(createItemDto: CreateItemDto, loggedInUser: any) {
+  async create(createItemDto: CreateItemDto) {
     const category = await this.categoryService.findOne(createItemDto.subCategoryId)
     const vendor = await this.vendorService.findOne(createItemDto.vendorId)
     const item = this.repo.create(createItemDto)
     item.category = category
     item.vendor = vendor
-    await this.categoryService.setCategoriesCount(loggedInUser)
     return this.repo.save(item);
   }
 
@@ -101,10 +100,9 @@ export class ItemsService {
     return this.repo.save(item);
   }
 
-  async remove(id: number, loggedInUser: any) {
+  async remove(id: number) {
     const item = await this.repo.findOne({ where: { id } })
     await this.repo.remove(item);
-    await this.categoryService.setCategoriesCount(loggedInUser)
     return
   }
 

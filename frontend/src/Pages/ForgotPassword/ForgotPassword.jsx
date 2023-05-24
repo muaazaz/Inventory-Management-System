@@ -53,8 +53,6 @@ const ForgotPassword = () => {
     }
   };
 
-  useEffect(() => {}, [otp]);
-
   return (
     <Box sx={mainDiv}>
       <Avatar sx={logo} src="/gigalabs.png" variant="rounded" />

@@ -56,6 +56,7 @@ const Organizations = () => {
           selfValue={true}
           noLabel={true}
           onChange={(e) => {
+            console.log("called")
             setLocation(e.target.value)
             setSearch("")
             dispatch(selectUsingLocation(e.target.value))

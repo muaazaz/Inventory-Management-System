@@ -12,7 +12,7 @@ export class AllComplaintsDto {
     @Expose()
     title: string
 
-    @Transform(({ obj }) => obj.user.role.role === 'admin' ? obj.user?.organization?.name : obj.user?.department?.name)
+    @Transform(({ obj }) => obj.user.role?.role === 'admin' ? obj.user?.organization?.name : obj.user?.department?.name)
     @Expose()
     belongsTo: string
 

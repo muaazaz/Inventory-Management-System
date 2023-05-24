@@ -1,19 +1,9 @@
 import { Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "./home.css";
+import { dashboardRoute } from "../../Constant/componentConstants";
 
 const Home = () => {
-  const [to, setTo] = useState(""),
-  data = useSelector((state)=>state.userValidation)
-  useEffect(() => {
-    if (data.token) {
-      setTo("/dashboard");
-    } else {
-      setTo("/login");
-    }
-  }, [data, to]);
   return (
     <div className="home">
       <Box
@@ -43,7 +33,7 @@ const Home = () => {
         <img src="/IMS_Home1.png" alt=""></img>
         <img src="/IMS_Home2.png" alt=""></img>
       </Box>
-      <Link to={to} className="home-link">
+      <Link to={dashboardRoute} className="home-link">
         View Inventory
       </Link>
     </div>

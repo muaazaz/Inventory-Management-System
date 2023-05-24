@@ -26,6 +26,7 @@ import {
   selectComplaintStatus,
 } from "../../Redux/complaint/complaintAction";
 import { getOrganizations } from "../../Redux/organization/organizationAction";
+import { Role } from "../../Constant/componentConstants";
 
 const Complaints = () => {
   const [search, setSearch] = useState(""),
@@ -44,11 +45,11 @@ const Complaints = () => {
   }, [dispatch]);
   return (
     <>
-      {userValidation.role !== "admin" ? (
+      {userValidation.role !== Role.Admin ? (
         <Box sx={main}>
           <Box sx={headerDiv}>
             <Typography sx={headerText}>Complaints</Typography>
-            {userValidation.role !== "employee" && (
+            {userValidation.role !== Role.Employee && (
               <Box component="form" sx={complaintSearchStyles}>
                 <InputBase
                   sx={{ textAlign: "center", m: 1 }}
@@ -71,7 +72,7 @@ const Complaints = () => {
                 </IconButton>
               </Box>
             )}
-            {userValidation.role === "superadmin" && (
+            {userValidation.role === Role.SuperAdmin && (
               <>
                 <Select
                   label={"Select Organization"}
@@ -103,7 +104,7 @@ const Complaints = () => {
                 />
               </>
             )}
-            {userValidation.role === "employee" && (
+            {userValidation.role === Role.Employee && (
               <Button
                 startIcon={<AddIcon />}
                 size="large"
@@ -121,18 +122,18 @@ const Complaints = () => {
           </Box>
           <Tables
             label={
-              userValidation.role === "superadmin"
+              userValidation.role === Role.SuperAdmin
                 ? complaintLabel
                 : ownComplaintLabel
             }
             rowsPerPage={10}
             hidden={false}
             routeQueryString={
-              userValidation.role === "employee" ? "?type=own" : ""
+              userValidation.role === Role.Employee ? "?type=own" : ""
             }
             viewRoute={"details/"}
             data={
-              userValidation.role === "employee"
+              userValidation.role === Role.Employee
                 ? complaintData.ownComplaints
                 : complaintData.complaints
                 ? complaintData.complaints

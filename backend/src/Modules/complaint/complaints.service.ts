@@ -63,7 +63,7 @@ export class ComplaintsService {
   }
 
   async findBySearch(filters: any, user: any) {
-    const searchRole = user.role === 'superadmin' ? 2 : 3
+    const searchRole = await this.roleService.getIdByRole(user.role) 
     switch (filters.type) {
       case 'own':
         if (!filters.search && !filters.statusSelect) {
@@ -92,7 +92,8 @@ export class ComplaintsService {
           const where = user.role === 'superadmin' ? {user: {role: {id: searchRole}}} : {user: {role: {id: searchRole}, organization: {id: user.organizationId}}}
           return this.repo.find({ where: where, relations: ['user', 'user.organization', 'user.role', 'user.department'], order:{id: "ASC"} })
         } else {
-          const queryWhere = user.role === 'superadmin' ? "" : `organization.id = ${user.organizationId}`
+          const queryWhere = user.role === 'superadmin' ? `user.role.id = ${searchRole}`
+          : `user.role.id = ${searchRole} AND organization.id = ${user.organizationId}`
           
           const typeormWhere = user.role === 'superadmin' ? 
           {user: {role: {id: searchRole}}} : 
@@ -108,7 +109,7 @@ export class ComplaintsService {
             .orWhere("LOWER(organization.name) LIKE :search AND role.id = :searchRole", { search: `%${filters.search.toLowerCase()}%`, searchRole })
             .andWhere(queryWhere)
             .orderBy("complaint.id", "ASC")
-            .execute()
+            .getMany()
             :
             filters.orgSelect ?
               await this.repo.find({

@@ -17,6 +17,7 @@ import { getUsers, searchUser, selectUserOrganization } from "../../Redux/user/u
 import { useNavigate } from "react-router-dom";
 import { getOrganizations } from "../../Redux/organization/organizationAction";
 import { getDepartments } from "../../Redux/department/departmentAction";
+import { Role } from "../../Constant/componentConstants";
 
 const Users = () => {
   const [search, setSearch] = useState(""),
@@ -24,26 +25,35 @@ const Users = () => {
     dispatch = useDispatch(),
     navigate = useNavigate(),
     {userValidation, userData, orgData, departmentData} = useSelector((state)=> state)
+
+
+  const handleSearch = (e) => {
+    dispatch(searchUser(e.target.value))
+    setSelect("")
+    setSearch(e.target.value)
+  }
+  const handleSelect = (e) => {
+    setSelect(e.target.value);
+    dispatch(selectUserOrganization(e.target.value))
+    setSearch("")
+  }
+
   useEffect(() => {
       dispatch(getUsers())
-      userValidation.role === "superadmin" ? dispatch(getOrganizations()) : dispatch(getDepartments())
+      userValidation.role === Role.SuperAdmin ? dispatch(getOrganizations()) : dispatch(getDepartments())
   }, [dispatch]);
   return (
         <Box sx={mainDiv}>
           <Box sx={headerDiv}>
             <Typography sx={headerText}>
-              {userValidation.role === "superadmin" ? "Admins" : "Employees"}
+              {userValidation.role === Role.SuperAdmin ? "Admins" : "Employees"}
             </Typography>
             <Box component="form" sx={searchStyles}>
               <InputBase
                 sx={{ textAlign: "center" }}
                 placeholder="Search something..."
                 value={search}
-                onChange={(e) => {
-                  dispatch(searchUser(e.target.value))
-                  setSelect("")
-                  setSearch(e.target.value)
-                }}
+                onChange={handleSearch}
               />
               <IconButton type="button" color="primary">
                 <SearchIcon />
@@ -51,20 +61,16 @@ const Users = () => {
             </Box>
             <Select
               label={
-                userValidation.role === "superadmin"
+                userValidation.role === Role.SuperAdmin
                   ? "Select Organization"
                   : "Select Department"
               }
-              menuItems={userValidation.role === "superadmin" ? orgData.organizations : departmentData.departments}
+              menuItems={userValidation.role === Role.SuperAdmin ? orgData.organizations : departmentData.departments}
               value={"name"}
               html={"name"}
               defaultValue={select}
               noLabel={true}
-              onChange={(e) => {
-                setSelect(e.target.value);
-                dispatch(selectUserOrganization(e.target.value))
-                setSearch("")
-              }}
+              onChange={handleSelect}
             />
             <Button
               startIcon={<AddIcon />}
@@ -74,7 +80,7 @@ const Users = () => {
               variant="contained"
               disableElevation
               onClick={() => {
-                navigate(userValidation.role === "superadmin" ? "admin/create" : "employee/create")
+                navigate(userValidation.role === Role.SuperAdmin ? "admin/create" : "employee/create")
               }}
             >
               {" "}
@@ -82,10 +88,10 @@ const Users = () => {
             </Button>
           </Box>
           <Tables
-            label={userValidation.role === "superadmin" ? adminsLabel : employeesLabel}
+            label={userValidation.role === Role.SuperAdmin ? adminsLabel : employeesLabel}
             rowsPerPage={10}
             viewRoute={
-              userValidation.role === "superadmin" ? "/user/admins/details/" : "/user/employees/details/"
+              userValidation.role === Role.SuperAdmin ? "/user/admins/details/" : "/user/employees/details/"
             }
             data={userData.users? userData.users : []}
           />

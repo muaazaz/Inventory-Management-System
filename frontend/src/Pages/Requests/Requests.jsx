@@ -17,6 +17,7 @@ import {
   searchRequests,
   selectUsingStatus,
 } from "../../Redux/request/requestAction";
+import { Role } from "../../Constant/componentConstants";
 
 const Requests = () => {
   const [search, setSearch] = useState(""),
@@ -28,24 +29,34 @@ const Requests = () => {
   useEffect(() => {
     dispatch(getRequests("request"));
   }, [userValidation]);
+
+  const handleSearch = (e) => {
+    dispatch(
+      searchRequests({ search: e.target.value, type: "request" })
+    );
+    setSearch(e.target.value);
+    setStatusSelect("");
+  }
+  const handleSelect = (e) => {
+    setSearch("");
+    setStatusSelect(e.target.value);
+    dispatch(
+      selectUsingStatus({ select: e.target.value, type: "request" })
+    );
+  }
+
   return (
     <Box sx={main}>
       <Box sx={headerDiv}>
         <Typography sx={headerText}>Requests</Typography>
-        {userValidation.role !== "employee" && (
+        {userValidation.role !== Role.Employee && (
           <>
             <Box component="form" sx={searchStyles}>
               <InputBase
                 sx={{ textAlign: "center", m: 1 }}
                 placeholder="Search something..."
                 value={search}
-                onChange={(e) => {
-                  dispatch(
-                    searchRequests({ search: e.target.value, type: "request" })
-                  );
-                  setSearch(e.target.value);
-                  setStatusSelect("");
-                }}
+                onChange={handleSearch}
               />
               <IconButton type="button" sx={{ p: "5%" }} color="primary">
                 <SearchIcon />
@@ -58,17 +69,11 @@ const Requests = () => {
               value={"status"}
               html={"status"}
               noLabel={true}
-              onChange={(e) => {
-                setSearch("");
-                setStatusSelect(e.target.value);
-                dispatch(
-                  selectUsingStatus({ select: e.target.value, type: "request" })
-                );
-              }}
+              onChange={handleSelect}
             />
           </>
         )}
-        {userValidation.role === "employee" && (
+        {userValidation.role === Role.Employee && (
           <Button
             startIcon={<AddIcon />}
             size="large"
@@ -86,7 +91,7 @@ const Requests = () => {
       </Box>
       <Tables
         label={
-          userValidation.role === "admin" ? requestsLabel : ownRequestLabel
+          userValidation.role === Role.Admin ? requestsLabel : ownRequestLabel
         }
         rowsPerPage={10}
         hidden={false}

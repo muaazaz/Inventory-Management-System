@@ -14,7 +14,7 @@ const Protected = ({ allowedRoles}) => {
           <Outlet />
         </>
       ) : (
-        <Navigate to="/" />
+        <Navigate to="/login" />
       )}
     </>
   );

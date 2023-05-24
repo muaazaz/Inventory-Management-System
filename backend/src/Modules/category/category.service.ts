@@ -27,7 +27,6 @@ export class CategoryService {
         await this.repo.save(subCategory)
       })
     }
-    await this.setCategoriesCount(loggedInUser)
     return category;
   }
 
@@ -43,7 +42,7 @@ export class CategoryService {
   async findAll(search: string, user: any) {
     if (!search) {
       return this.repo.find({
-        relations: ['parent', 'childern', 'organization', 'childern.vendors'], where: { organization: { id: user.organizationId }, parent: IsNull() },
+        relations: ['parent', 'childern', 'organization', 'childern.vendors', 'childern.item', 'childern.item.assigned_to'], where: { organization: { id: user.organizationId }, parent: IsNull() },
         order: {
           id: "ASC",
           childern: { id: "ASC" }
@@ -56,6 +55,7 @@ export class CategoryService {
         .leftJoinAndSelect('category.childern', 'childern')
         .leftJoinAndSelect('childern.vendors', 'vendors')
         .where("LOWER(category.name) LIKE :search AND organization.id = :orgId", { search: `%${search.toLowerCase()}%`, orgId: user.organizationId })
+        .andWhere("category.parent Is Null")
         .orderBy("category.id", "ASC")
         .addOrderBy("childern.id", "ASC")
         .getMany()
@@ -78,8 +78,7 @@ export class CategoryService {
       return category;
     }
     Object.assign(category, updateData)
-    let [r1, r2] = await Promise.all([this.repo.save(category), this.setCategoriesCount(loggedInUser)])
-    return r1
+    return this.repo.save(category)
   }
 
   async remove(id: number, loggedInUser: any) {
@@ -89,9 +88,7 @@ export class CategoryService {
       return this.repo.remove(categories);
     }
 
-    await this.setCategoriesCount(loggedInUser)
     return this.repo.remove(category)
-
   }
 
   async getCount(user: any) {
@@ -115,35 +112,5 @@ export class CategoryService {
     })
 
     return { monthlyCount, currentMonthCount, totalCount }
-  }
-
-//Function to calculate necessary counts
-  async setCategoriesCount(user: any) {
-    const categoriesCount = await this.repo.createQueryBuilder('category')
-      .select('COUNT(vendors.id) AS vendors, COUNT(childern.id) AS childs, category.name, category.id')
-      .leftJoin('category.organization', 'organization')
-      .leftJoin('category.childern', 'childern')
-      .leftJoin('childern.vendors', 'vendors')
-      .where('category.parent Is Null AND organization.id = :id', { id: user.organizationId })
-      .groupBy('category.name, category.id')
-      .orderBy('category.id')
-      .execute()
-
-    await this.setSubCategoriesCount()
-
-    for (const count of categoriesCount) {
-      const category = await this.repo.findOneBy({ id: count.id })
-      category.vendorsCount = count.vendors
-      category.subCategoriesCount = count.childs
-      await this.repo.save(category)
-    }
-  }
-
-  async setSubCategoriesCount() {
-    const subCategories = await this.repo.find({ where: { parent: Not(IsNull()) } })
-    subCategories.forEach(async (subCategory) => {
-      await this.itemService.setItemQuantityCount(subCategory)
-      await this.repo.save(subCategory)
-    })
   }
 }

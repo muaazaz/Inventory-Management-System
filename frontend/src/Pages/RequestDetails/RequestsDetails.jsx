@@ -15,6 +15,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editRequest, getRequestDetails } from "../../Redux/request/requestAction";
+import { Role } from "../../Constant/componentConstants";
 
 const RequestDetails = () => {
   let ignoreArray = ["id", "submission_date", "status", "user"];
@@ -50,7 +51,7 @@ const RequestDetails = () => {
             <Typography variant="content">
               Submission Date: {requestData.requestDetail.submission_date}
             </Typography>
-            {userValidation.role !== "employee" &&
+            {userValidation.role !== Role.Employee &&
               (
                 <>
                   <Button
@@ -88,7 +89,7 @@ const RequestDetails = () => {
               )}
             </Box>
           ))}
-          {userValidation.role !== "employee" && (
+          {userValidation.role !== Role.Employee && (
             <>
               <Typography variant="content" sx={userText}>
                 Request Submitted By

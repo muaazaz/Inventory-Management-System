@@ -33,7 +33,7 @@ export class OrganizationService {
         .orWhere("LOWER(organization.email) LIKE :search", { search: `%${search.toLowerCase()}%` })
         .orWhere("LOWER(organization.city) LIKE :search", { search: `%${search.toLowerCase()}%` })
         .orWhere("LOWER(organization.country) LIKE :search", { search: `%${search.toLowerCase()}%` })
-        .orderBy("organzation.id","ASC")
+        .orderBy("organization.id","ASC")
         .getMany()
         : await this.repo.find({
           relations: ['photo'],

@@ -18,8 +18,8 @@ export class ItemsController {
 
   @Roles(Role.Admin)
   @Post()
-  create(@Body() createItemDto: CreateItemDto, @UserDecorator() user: any) {
-    return this.itemsService.create(createItemDto , user);
+  create(@Body() createItemDto: CreateItemDto) {
+    return this.itemsService.create(createItemDto);
   }
 
   @Roles(Role.Admin)
@@ -54,7 +54,7 @@ export class ItemsController {
 
   @Roles(Role.Admin)
   @Delete(':id')
-  remove(@Param('id') id: string, @UserDecorator() user: any) {
-    return this.itemsService.remove(+id, user);
+  remove(@Param('id') id: string) {
+    return this.itemsService.remove(+id);
   }
 }

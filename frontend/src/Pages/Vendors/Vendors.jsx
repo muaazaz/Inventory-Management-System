@@ -22,6 +22,33 @@ const Vendors = () => {
     [subCatSelect, setSubCatSelect] = useState([]),
     { vendorData, categoryData } = useSelector((state) => state);
 
+  const handleSearch = (e) => {
+    setCatSelect("")
+    setSubCatSelect("")
+    setSearch(e.target.value);
+    dispatch(searchVendors(e.target.value))
+  }
+
+  const handleSelectCategory = (e) => {
+    setCatSelect(e.target.value)
+    setSearch("")
+    setSubCatSelect("")
+    dispatch(selectUsingCategory(e.target.value))
+    categoryData.categories.forEach((category) => {
+      if (category.name === e.target.value){
+        setSubCategory(category.subCategories);
+      }
+    });
+    
+    setDisabled(false);
+  }
+
+  const handleSelectSubCategory = (e) => {
+    setSearch("")
+    setSubCatSelect(e.target.value)
+    dispatch(selectUsingSubCategory(e.target.value))
+  }
+
   useEffect(() => {
     dispatch(getVendors());
     dispatch(getCategories());
@@ -35,12 +62,7 @@ const Vendors = () => {
             sx={{ textAlign: "center", m: 1 }}
             placeholder="Search something..."
             value={search}
-            onChange={(e) => {
-              setCatSelect("")
-              setSubCatSelect("")
-              setSearch(e.target.value);
-              dispatch(searchVendors(e.target.value))
-            }}
+            onChange={handleSearch}
           />
           <IconButton type="button" sx={{ p: "5%" }} color="primary">
             <SearchIcon />
@@ -53,32 +75,17 @@ const Vendors = () => {
           value={"name"}
           html={"name"}
           noLabel={true}
-          onChange={(e) => {
-            setCatSelect(e.target.value)
-            setSearch("")
-            setSubCatSelect("")
-            dispatch(selectUsingCategory(e.target.value))
-            categoryData.categories.forEach((category) => {
-              if (category.name === e.target.value)
-                setSubCategory(category.childern);
-            });
-            
-            setDisabled(false);
-          }}
+          onChange={handleSelectCategory}
         />
         <Select
           label={"Select Sub-Category"}
           menuItems={subCategory}
           defaultValue={subCatSelect}
-          value={"label"}
-          html={"label"}
+          value={"name"}
+          html={"name"}
           disabled={disabled}
           noLabel={true}
-          onChange={(e) => {
-            setSearch("")
-            setSubCatSelect(e.target.value)
-            dispatch(selectUsingSubCategory(e.target.value))
-          }}
+          onChange={handleSelectSubCategory}
         />
         <Button
           startIcon={<AddIcon />}

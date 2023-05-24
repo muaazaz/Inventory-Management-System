@@ -40,7 +40,7 @@ const Input = ({
               rows={rows}
               defaultValue={value}
               placeholder={placeHolder}
-              onChange={onChange ? onchange : handleDataChange}
+              onChange={onChange ? onChange : handleDataChange}
               disabled={disable}
             ></textarea>
           </>
@@ -53,7 +53,7 @@ const Input = ({
             defaultValue={value}
             required={require}
             placeholder={placeHolder}
-            onChange={onChange ? onchange : handleDataChange}
+            onChange={onChange ? onChange : handleDataChange}
             disabled={disable}
           />
         )}

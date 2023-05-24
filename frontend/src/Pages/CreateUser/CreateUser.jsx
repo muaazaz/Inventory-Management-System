@@ -19,6 +19,7 @@ import {
 import PhotoUpload from "../../Components/Shared/PhotoUpload/PhotoUpload";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { getDepartments } from "../../Redux/department/departmentAction";
+import { Role } from "../../Constant/componentConstants";
 
 const CreateUser = ({ user }) => {
   const [formData, setFormData] = useState({
@@ -41,7 +42,7 @@ const CreateUser = ({ user }) => {
 
   useEffect(() => {
     if(!once){
-      userValidation.role === "superadmin"
+      userValidation.role === Role.SuperAdmin
       ? dispatch(getOrganizations())
       : dispatch(getDepartments());
       setOnce(true)
@@ -78,7 +79,7 @@ const CreateUser = ({ user }) => {
           Back
         </Button>
         <Typography variant="h3" sx={registerHeaderTextStyles}>
-          Add New {userValidation.role === " admin" ? "Employee" : "Admin"}
+          Add New {userValidation.role === Role.Admin ? "Employee" : "Admin"}
         </Typography>
         <Button
           sx={registerCancelButton}

@@ -27,7 +27,7 @@ export class VendorsService {
   }
 
   async findAll(filters: any, logInUser: any) {
-    if (!filters.search && !filters.selectCategory && !filters.selectSubCategory) {
+    if (!filters.search && !filters.catSelect && !filters.subCatSelect) {
       return this.repo.find({
         relations: ['categories', 'categories.parent', 'categories.organization'],
         where: { categories: { organization: { id: logInUser.organizationId } } },
@@ -46,10 +46,10 @@ export class VendorsService {
         .orderBy("vendor.id", "ASC")
         .getMany()
         :
-        !filters.selectSubCategory ?
+        filters.catSelect ?
           await this.repo.find({
             relations: ['categories', 'categories.organization', 'categories.parent'],
-            where: { categories: { parent: { name: filters.selectCategory }, organization: { id: logInUser.organizationId } } },
+            where: { categories: { parent: { name: filters.catSelect }, organization: { id: logInUser.organizationId } } },
             order: {
               id: "ASC"
             }
@@ -57,7 +57,7 @@ export class VendorsService {
           :
           await this.repo.find({
             relations: ['categories', 'categories.organization', 'categories.parent'],
-            where: { categories: { name: filters.selectSubCategory, organization: { id: logInUser.organizationId } } },
+            where: { categories: { name: filters.subCatSelect, organization: { id: logInUser.organizationId } } },
             order: {
               id: "ASC"
             }
